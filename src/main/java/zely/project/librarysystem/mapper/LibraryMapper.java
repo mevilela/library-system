@@ -7,7 +7,8 @@ import zely.project.librarysystem.dto.library.LibraryDto;
 @Mapper
 public interface LibraryMapper {
 
-    Library libraryToLibraryDto(LibraryDto libraryDto);
+    Library toLibraryEntity(LibraryDto libraryDto);
 
-    LibraryDto libraryDtoToLibrary(Library library);
+    LibraryDto toLibraryDto(Library library);
 }
+
