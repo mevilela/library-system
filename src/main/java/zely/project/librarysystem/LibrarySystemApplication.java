@@ -33,10 +33,19 @@ public class LibrarySystemApplication {
 			member.setDateOfMembership(LocalDate.of(2024, 04, 12));
 			member.setTotalBooksCheckedOut(4);
 
+			Person joao = new Person("Joao", "Rua Paissandu 344", "joao@gmail.com", "99199-0000");
+			Librarian librarian = new Librarian();
+			librarian.setPerson(joao);
+			librarian.setDepartment("book checkout");
+			librarian.setAccountStatus(AccountStatus.ACTIVE);
+			librarian.setAccountType(AccountType.LIBRARIAN);
+			librarian.setPassword("123");
+
+
 			Library library = new Library("Library 1", "Rua das Flores, 10");
 
-
 			accountRepository.save(member);
+			accountRepository.save(librarian);
 			libraryRepository.save(library);
 
 

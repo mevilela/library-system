@@ -1,7 +1,6 @@
 package zely.project.librarysystem.service.library;
 
 import org.springframework.stereotype.Service;
-import zely.project.librarysystem.domain.library.Library;
 import zely.project.librarysystem.dto.library.LibraryDto;
 import zely.project.librarysystem.mapper.LibraryMapper;
 import zely.project.librarysystem.repository.library.LibraryRepository;
@@ -54,4 +53,14 @@ public class LibraryServiceImpl implements LibraryService {
                 .map(libraryMapper::toLibraryDto);
 
     }
+    @Override
+    public Boolean deleteLibraryById(Integer id){
+        if (libraryRepository.existsById(id)){
+            libraryRepository.deleteById(id);
+            return true;
+        }
+
+        return false;
+    }
+
 }

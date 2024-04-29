@@ -4,10 +4,10 @@ import org.mapstruct.Mapper;
 import zely.project.librarysystem.domain.account.Person;
 import zely.project.librarysystem.dto.account.PersonDto;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PersonMapper {
 
-    Person personToPersonDto(PersonDto personDto);
+    Person toPersonEntity(PersonDto personDto);
 
-    PersonDto personDtoToPerson(Person person);
+    PersonDto toPersonDto(Person person);
 }

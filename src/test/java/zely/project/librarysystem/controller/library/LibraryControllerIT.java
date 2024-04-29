@@ -85,6 +85,8 @@ class LibraryControllerIT {
 
     }
 
+    @Transactional
+    @Rollback
     @Test
     void updateExistingLibrary(){
         Library library = libraryRepository.findAll().get(0);
@@ -94,7 +96,7 @@ class LibraryControllerIT {
 
         libraryDto.setName(newName);
 
-        ResponseEntity responseEntity = libraryController.updateById(library.getId(), libraryDto);
+        ResponseEntity responseEntity = libraryController.updateLibraryById(library.getId(), libraryDto);
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
 
         Library updatedLibrary = libraryRepository.findById(library.getId()).get();
@@ -104,6 +106,26 @@ class LibraryControllerIT {
     @Test
     void testUpdateNotFound(){
         assertThrows(NotFoundException.class, () ->
-                libraryController.updateById(2222, null));
+                libraryController.updateLibraryById(2222, null));
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    void deleteByIdFound(){
+        Library library = libraryRepository.findAll().get(0);
+
+        ResponseEntity responseEntity = libraryController.deleteLibraryById(library.getId());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
+
+        assertThat(libraryRepository.findById(library.getId()).isEmpty());
+
+
+    }
+
+    @Test
+    void testDeleteNotFound(){
+        assertThrows(NotFoundException.class, () ->
+                libraryController.deleteLibraryById(22));
     }
 }

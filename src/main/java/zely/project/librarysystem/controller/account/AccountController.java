@@ -1,11 +1,15 @@
 package zely.project.librarysystem.controller.account;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.webjars.NotFoundException;
 import zely.project.librarysystem.domain.account.Account;
+import zely.project.librarysystem.domain.account.AccountType;
 import zely.project.librarysystem.domain.library.Library;
+import zely.project.librarysystem.dto.account.AccountDto;
+import zely.project.librarysystem.dto.library.LibraryDto;
+import zely.project.librarysystem.service.account.AccountService;
 import zely.project.librarysystem.service.account.AccountServiceImpl;
 
 import java.util.List;
@@ -14,14 +18,42 @@ import java.util.List;
 @RequestMapping("/api/account")
 public class AccountController {
 
-    private final AccountServiceImpl accountService;
+    private final AccountService accountService;
 
-    public AccountController(AccountServiceImpl accountService){
+    public AccountController(AccountService accountService){
         this.accountService = accountService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Account>> getAllAccounts(){
-        return ResponseEntity.ok(accountService.getAllAccounts());
+    public List<AccountDto> getAllAccounts(){
+        return accountService.getAllAccounts();
     }
+
+    @GetMapping("/{id}")
+    public AccountDto getAccountById(Integer id){
+        return accountService.getAccountById(id).orElseThrow(() -> new NotFoundException("id not found"));
+    }
+
+    @PostMapping
+    public ResponseEntity<AccountDto> createNewAccount(@RequestBody AccountDto accountDto){
+        AccountDto savedAccount = accountService.createNewAccount(accountDto);
+
+        return new ResponseEntity<>(savedAccount, HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity updateByAccountId(@PathVariable Integer id, @RequestBody AccountDto accountDto){
+        accountService.updateAccountById(id, accountDto).orElseThrow(() -> new NotFoundException("account not found"));
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteAccountById(@PathVariable Integer id){
+        if(!accountService.deleteAccountById(id)){
+            throw new NotFoundException("account not found");
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }

@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import zely.project.librarysystem.domain.library.Library;
 import zely.project.librarysystem.dto.library.LibraryDto;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface LibraryMapper {
 
     Library toLibraryEntity(LibraryDto libraryDto);

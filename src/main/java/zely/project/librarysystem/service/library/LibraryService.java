@@ -16,4 +16,6 @@ public interface LibraryService {
     LibraryDto createNewLibrary(LibraryDto libraryDto);
 
     Optional<LibraryDto> updateLibrary(Integer id, LibraryDto libraryDto);
+
+    Boolean deleteLibraryById(Integer id);
 }

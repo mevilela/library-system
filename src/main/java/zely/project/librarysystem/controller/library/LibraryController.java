@@ -1,7 +1,6 @@
 package zely.project.librarysystem.controller.library;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +8,6 @@ import org.webjars.NotFoundException;
 import zely.project.librarysystem.dto.library.LibraryDto;
 import zely.project.librarysystem.service.library.LibraryService;
 
-import java.io.NotActiveException;
 import java.util.List;
 
 @RestController
@@ -45,10 +43,19 @@ public class LibraryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateById(@PathVariable Integer id, @RequestBody LibraryDto libraryDto){
+    public ResponseEntity updateLibraryById(@PathVariable Integer id, @RequestBody LibraryDto libraryDto){
 
         libraryService.updateLibrary(id, libraryDto).orElseThrow(() -> new NotFoundException("Library not found"));
 
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteLibraryById(@PathVariable Integer id){
+
+        if (!libraryService.deleteLibraryById(id)){
+            throw new NotFoundException("id not found");
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
