@@ -9,7 +9,7 @@ import java.util.Optional;
 @Service
 public interface LibraryService {
 
-    List<LibraryDto> getAllLibraries();
+    List<LibraryDto> getAllLibraries(String libraryName);
 
     Optional<LibraryDto> getLibraryById(Integer id);
 

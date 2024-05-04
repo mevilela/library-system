@@ -22,9 +22,9 @@ public class LibraryController {
     }
 
     @GetMapping
-    public List<LibraryDto> getAllLibraries(){
+    public List<LibraryDto> getAllLibraries(@RequestParam(required = false) String libraryName){
 
-        return libraryService.getAllLibraries();
+        return libraryService.getAllLibraries(libraryName);
     }
 
     @GetMapping("/{id}")

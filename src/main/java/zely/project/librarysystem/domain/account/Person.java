@@ -1,52 +1,18 @@
 package zely.project.librarysystem.domain.account;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Person {
-    private String name;
-    private String address;
-    private String email;
-    private String phone;
+    private java.lang.String name;
+    private java.lang.String address;
+    private java.lang.String email;
+    private java.lang.String phone;
 
-    public Person() {
-    }
-
-    public Person(String name, String address, String email, String phone) {
-        this.name = name;
-        this.address = address;
-        this.email = email;
-        this.phone = phone;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 }

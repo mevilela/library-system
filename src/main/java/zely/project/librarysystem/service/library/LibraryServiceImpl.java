@@ -1,10 +1,13 @@
 package zely.project.librarysystem.service.library;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import zely.project.librarysystem.domain.library.Library;
 import zely.project.librarysystem.dto.library.LibraryDto;
 import zely.project.librarysystem.mapper.LibraryMapper;
 import zely.project.librarysystem.repository.library.LibraryRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,13 +25,26 @@ public class LibraryServiceImpl implements LibraryService {
 
 
     @Override
-    public List<LibraryDto> getAllLibraries() {
-        return libraryRepository.findAll()
-                .stream()
+    public List<LibraryDto> getAllLibraries(String libraryName) {
+
+        List<Library> libraryList;
+
+        if(StringUtils.hasText(libraryName)){
+            libraryList = listLibraryByName(libraryName);
+        } else {
+            libraryList = libraryRepository.findAll();
+        }
+
+        return libraryList.stream()
                 .map(libraryMapper::toLibraryDto)
                 .collect(Collectors.toList());
 
     }
+
+   public List<Library> listLibraryByName(String libraryName){
+        return libraryRepository.findAllByNameIsLikeIgnoreCase("%" + libraryName + "%");
+    }
+
 
     @Override
     public Optional<LibraryDto> getLibraryById(Integer id) {

@@ -1,0 +1,11 @@
+id,dtype,password,account_type,account_status,name,address,email,phone,department,date_of_membership,total_books_checked_out
+1,"Member","123456","MEMBER","ACTIVE","Ava Lee","123 Elm St","ava.lee@example.com","123-456-7891","","2022-05-15",3
+2,"Member","123456","MEMBER","ACTIVE","Charlotte Walker","456 Oak St","charlotte.walker@example.com","123-456-7892","","2022-11-22",5
+3,"Member","123456","MEMBER","CLOSED","Marie Walls","12 Lua St","walls@example.com","123-456-7892","","2021-03-22",23
+4,"Member","123456","MEMBER","ACTIVE","Emma White","457 Sun St","emma.white@example.com","123-456-7892","","2021-01-22",12
+5,"Member","123456","MEMBER","CANCELED","Charlie Palmer","56 Wall St","charlieee@example.com","123-456-7892","","2023-02-22",2
+6,"Member","123456","MEMBER","BLACKLISTED","Claudia Werner","58 Oak St","cw@example.com","123-456-7892","","2021-06-12",19
+7,"Librarian","123456","LIBRARIAN","ACTIVE","John Doe","123 Main St","john.doe@example.com","123-456-7890","Research","",""
+8,"Librarian","123456","LIBRARIAN","ACTIVE","Johana Parker","15 White St","parker@example.com","123-456-7890","Customer Service","",""
+9,"Librarian","123456","LIBRARIAN","ACTIVE","Luke Floyd","145 Red St","lukefloyd@example.com","123-456-7890","Archive","",""
+10,"Librarian","123456","LIBRARIAN","CLOSED","Ruth Dennis","256 Light St","medennis@example.com","123-456-7890","Social Media","",""

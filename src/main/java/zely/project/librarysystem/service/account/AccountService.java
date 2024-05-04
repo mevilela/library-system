@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public interface AccountService {
 
-    List<AccountDto> getAllAccounts();
+    List<AccountDto> getAllAccounts(java.lang.String name);
 
     List<Account> getAllMembers();
 
