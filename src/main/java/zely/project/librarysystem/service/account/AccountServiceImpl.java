@@ -3,6 +3,7 @@ package zely.project.librarysystem.service.account;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import zely.project.librarysystem.domain.account.Account;
+import zely.project.librarysystem.domain.account.AccountType;
 import zely.project.librarysystem.dto.account.AccountDto;
 import zely.project.librarysystem.mapper.AccountMapper;
 import zely.project.librarysystem.mapper.PersonMapper;
@@ -26,12 +27,18 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public List<AccountDto> getAllAccounts(java.lang.String name) {
+    public List<AccountDto> getAllAccounts(String name, AccountType type) {
 
         List<Account> accountList;
 
-        if(StringUtils.hasText(name)){
+        if(StringUtils.hasText(name) && type == null){
             accountList = accountListByName(name);
+        } else if (!StringUtils.hasText(name) && type != null) {
+            accountList = accountListByType(type);
+
+        } else if (StringUtils.hasText(name) && type != null) {
+            accountList = accountListByNameAndType(name, type);
+
         } else {
             accountList = accountRepository.findAll();
         }
@@ -39,6 +46,14 @@ public class AccountServiceImpl implements AccountService {
         return accountList.stream()
                 .map(accountMapper::toAccountDto)
                 .collect(Collectors.toList());
+    }
+
+    private List<Account> accountListByNameAndType(String name, AccountType type) {
+        return accountRepository.findAccountByPersonNameIsLikeIgnoreCaseAndAccountType(name, type);
+    }
+
+    private List<Account> accountListByType(AccountType type) {
+        return accountRepository.findAllByAccountType(type);
     }
 
     private List<Account> accountListByName(java.lang.String name) {

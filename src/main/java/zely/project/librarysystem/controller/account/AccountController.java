@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.domain.account.AccountType;
 import zely.project.librarysystem.dto.account.AccountDto;
 import zely.project.librarysystem.service.account.AccountService;
 
@@ -20,9 +21,10 @@ public class AccountController {
     }
 
     @GetMapping
-    public List<AccountDto> getAllAccounts(@RequestParam(required = false) String name){
+    public List<AccountDto> getAllAccounts(@RequestParam(required = false) String name,
+                                           @RequestParam(required = false)AccountType type){
 
-        return accountService.getAllAccounts(name);
+        return accountService.getAllAccounts(name, type);
     }
 
     @GetMapping("/{id}")

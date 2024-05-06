@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import zely.project.librarysystem.bootstrap.BootstrapData;
 import zely.project.librarysystem.domain.account.Account;
+import zely.project.librarysystem.domain.account.AccountType;
 import zely.project.librarysystem.service.account.AccountCsvServiceImpl;
 import zely.project.librarysystem.service.library.LibraryCsvServiceImpl;
 
@@ -28,10 +29,21 @@ class AccountRepositoryTest {
         assertThat(list.size()).isEqualTo(1);
     }
 
-//    @Test
-//    void findAccountByPersonNameAndAccountType() {
-//        List<Account> list = accountRepository.findAccountByPersonNameIsLikeIgnoreCaseAndAccountTypeContaining("%charlie%", String.MEMBER);
-//
-//        assertThat(list.size()).isEqualTo(1);
-//    }
+    @Test
+    void findAccountByPersonNameIsLikeIgnoreCaseAndAccountType() {
+
+        List<Account> list = accountRepository.findAccountByPersonNameIsLikeIgnoreCaseAndAccountType("%Charlie%", AccountType.MEMBER);
+
+        assertThat(list.size()).isEqualTo(1);
+
+    }
+
+    @Test
+    void findAllByAccountType() {
+        List<Account> list = accountRepository.findAllByAccountType(AccountType.LIBRARIAN);
+
+        assertThat(list.size()).isEqualTo(4);
+    }
+
+
 }

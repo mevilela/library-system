@@ -58,28 +58,39 @@ class AccountControllerIT {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
+
     @Test
-    public void testListAccountByName() throws Exception {
+    public void testListAccountByNameAndAccountType() throws Exception {
         mockMvc.perform(get("/api/account")
-                        .queryParam("name", "Charlie"))
+                        .queryParam("name", "%Johana%")
+                        .queryParam("type", AccountType.LIBRARIAN.name()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(1)));
     }
 
-//    @Test
-//    public void testListAccountByNameAndAccountType() throws Exception {
-//        mockMvc.perform(get("/api/account")
-//                        .queryParam("name", "Charlie")
-//                        .queryParam("type", String.MEMBER.toString()))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.size()", is(1)));
-//    }
+
+    @Test
+    public void testListAccountAccountType() throws Exception {
+        mockMvc.perform(get("/api/account")
+                        .queryParam("type", AccountType.LIBRARIAN.name()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(4)));
+    }
+
+
+    @Test
+    public void testListAccountByName() throws Exception {
+        mockMvc.perform(get("/api/account")
+                        .queryParam("name", "Johana"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(1)));
+    }
 
     @Test
     void getAllAccounts(){
-        List<AccountDto> accountDtos = (List<AccountDto>) accountController.getAllAccounts(null);
+        List<AccountDto> accountDtos = (List<AccountDto>) accountController.getAllAccounts(null, null);
 
-        assertThat(accountDtos.size()).isEqualTo(2);
+        assertThat(accountDtos.size()).isEqualTo(12);
     }
 
     @Test
@@ -96,7 +107,7 @@ class AccountControllerIT {
     @Test
     void testEmptyList(){
         accountRepository.deleteAll();
-        List<AccountDto> accountDtos = accountController.getAllAccounts(null);
+        List<AccountDto> accountDtos = accountController.getAllAccounts(null, null);
 
         assertThat(accountDtos.size()).isEqualTo(0);
     }

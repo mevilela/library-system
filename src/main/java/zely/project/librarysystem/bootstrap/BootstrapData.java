@@ -63,21 +63,49 @@ public class BootstrapData implements CommandLineRunner {
             List<AccountCsvRecord> accountRecs = accountCsvService.convertCSV(file);
 
             for(AccountCsvRecord accountRecord : accountRecs){
-                String accountType = String.valueOf(accountRecord.getAccountType().toUpperCase());
 
+                String accountTypeStr = String.valueOf(accountRecord.getAccountType().toUpperCase());
+
+                AccountType accountType;
                 Account account;
-                if (accountType.equals(MEMBER)) {
-                    account = new Member();
-                    account.setAccountType(MEMBER);
-                    ((Member) account).setDateOfMembership(accountRecord.getDateOfMembership());
-                    ((Member) account).setTotalBooksCheckedOut(accountRecord.getTotalBooksCheckedOut());
-                } else if (accountType.equals(LIBRARIAN)) {
-                    account = new Librarian();
-                    account.setAccountType(LIBRARIAN);
-                    ((Librarian) account).setDepartment(accountRecord.getDepartment());
-                } else {
-                    throw new IllegalArgumentException("Unknown account type");
+
+                try {
+                    accountType = AccountType.valueOf(accountTypeStr);
+                } catch (IllegalArgumentException ex) {
+                    throw new IllegalArgumentException("Unknown account type: " + accountTypeStr);
                 }
+
+                switch (accountType) {
+                    case MEMBER:
+                        account = new Member();
+                        ((Member) account).setAccountType(MEMBER);
+                        ((Member) account).setDateOfMembership(accountRecord.getDateOfMembership());
+                        ((Member) account).setTotalBooksCheckedOut(accountRecord.getTotalBooksCheckedOut());
+                        break;
+
+                    case LIBRARIAN:
+                        account = new Librarian();
+                        ((Librarian) account).setAccountType(LIBRARIAN);
+                        ((Librarian) account).setDepartment(accountRecord.getDepartment());
+                        break;
+
+                    default:
+                        throw new IllegalArgumentException("Unsupported account type: " + accountType);
+                }
+
+
+//                if (account.getAccountType().equals("MEMBER")) {
+//                    account = new Member();
+//                    account.setAccountType(MEMBER);
+//                    ((Member) account).setDateOfMembership(accountRecord.getDateOfMembership());
+//                    ((Member) account).setTotalBooksCheckedOut(accountRecord.getTotalBooksCheckedOut());
+//                } else if (accountType.equals(LIBRARIAN)) {
+//                    account = new Librarian();
+//                    account.setAccountType(LIBRARIAN);
+//                    ((Librarian) account).setDepartment(accountRecord.getDepartment());
+//                } else {
+//                    throw new IllegalArgumentException("Unknown account type");
+//                }
 
                 Person person = new Person(accountRecord.getName(), accountRecord.getAddress(), accountRecord.getEmail(), accountRecord.getPhone());
                 account.setPerson(person);

@@ -1,15 +1,15 @@
 package zely.project.librarysystem.service.library;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import zely.project.librarysystem.dto.library.LibraryDto;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public interface LibraryService {
 
-    List<LibraryDto> getAllLibraries(String libraryName);
+    Page<LibraryDto> getAllLibraries(String libraryName, Integer pageNumber, Integer pageSize);
 
     Optional<LibraryDto> getLibraryById(Integer id);
 

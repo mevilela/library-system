@@ -1,14 +1,13 @@
 package zely.project.librarysystem.controller.library;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
 import zely.project.librarysystem.dto.library.LibraryDto;
 import zely.project.librarysystem.service.library.LibraryService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/library")
@@ -22,9 +21,11 @@ public class LibraryController {
     }
 
     @GetMapping
-    public List<LibraryDto> getAllLibraries(@RequestParam(required = false) String libraryName){
+    public Page<LibraryDto> getAllLibraries(@RequestParam(required = false) String libraryName,
+                                            @RequestParam(required = false) Integer pageNumber,
+                                            @RequestParam(required = false) Integer pageSize){
 
-        return libraryService.getAllLibraries(libraryName);
+        return libraryService.getAllLibraries(libraryName, pageNumber, pageSize);
     }
 
     @GetMapping("/{id}")

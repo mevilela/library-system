@@ -1,5 +1,10 @@
 package zely.project.librarysystem.service.library;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import zely.project.librarysystem.domain.library.Library;
@@ -7,7 +12,6 @@ import zely.project.librarysystem.dto.library.LibraryDto;
 import zely.project.librarysystem.mapper.LibraryMapper;
 import zely.project.librarysystem.repository.library.LibraryRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,26 +27,55 @@ public class LibraryServiceImpl implements LibraryService {
         this.libraryMapper = libraryMapper;
     }
 
+    private static final  Integer DEFAULT_PAGE = 0;
+    private static final  Integer DEFAULT_PAGE_SIZE = 25;
+
 
     @Override
-    public List<LibraryDto> getAllLibraries(String libraryName) {
+    public Page<LibraryDto> getAllLibraries(String libraryName, Integer pageNumber, Integer pageSize) {
 
-        List<Library> libraryList;
+
+        PageRequest pageRequest = buildRequest(pageNumber, pageSize);
+
+        Page<Library> libraryPage;
 
         if(StringUtils.hasText(libraryName)){
-            libraryList = listLibraryByName(libraryName);
+            libraryPage = listLibraryByName(libraryName, pageRequest);
         } else {
-            libraryList = libraryRepository.findAll();
+            libraryPage = libraryRepository.findAll(pageRequest);
         }
 
-        return libraryList.stream()
-                .map(libraryMapper::toLibraryDto)
-                .collect(Collectors.toList());
+        return libraryPage.map(libraryMapper::toLibraryDto);
+
 
     }
 
-   public List<Library> listLibraryByName(String libraryName){
-        return libraryRepository.findAllByNameIsLikeIgnoreCase("%" + libraryName + "%");
+    public PageRequest buildRequest(Integer pageNumber, Integer pageSize){
+        int queryPageNumber;
+        int queryPageSize;
+
+        if (pageNumber != null && pageNumber > 0){
+            queryPageNumber = pageNumber - 1;
+        } else {
+            queryPageNumber = DEFAULT_PAGE;
+        }
+
+        if (pageSize == null){
+            queryPageSize = DEFAULT_PAGE_SIZE;
+        } else {
+            if(pageSize > 1000){
+                queryPageSize = 1000;
+            } else {
+                queryPageSize =  pageSize;
+            }
+        }
+
+        Sort sort = Sort.by(Sort.Order.asc("name"));
+        return PageRequest.of(queryPageNumber, queryPageSize, sort);
+    }
+
+   public Page<Library> listLibraryByName(String libraryName, Pageable pageable){
+        return libraryRepository.findAllByNameIsLikeIgnoreCase("%" + libraryName + "%", null);
     }
 
 
