@@ -1,4 +1,4 @@
-package zely.project.librarysystem.domain.Book;
+package zely.project.librarysystem.domain.book;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +21,7 @@ public class Publisher {
     @Column(name = "publisher_name", nullable = false)
     private String publisherName;
 
-    @OneToMany(mappedBy = "publisher")
+    @OneToMany(mappedBy = "publisher", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<Book> books = new HashSet<>();
 
 }

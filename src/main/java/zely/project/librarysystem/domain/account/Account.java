@@ -31,7 +31,7 @@ public abstract class Account {
     @Embedded
     private Person person;
 
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<LibraryCard> libraryCards;
 
 

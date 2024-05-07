@@ -1,8 +1,8 @@
-package zely.project.librarysystem.domain.Book;
+package zely.project.librarysystem.domain.book;
 
 import jakarta.persistence.*;
 import lombok.*;
-import zely.project.librarysystem.domain.library.Library;
+import zely.project.librarysystem.domain.library.Rack;
 
 import java.time.LocalDate;
 
@@ -18,31 +18,34 @@ public class BookItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "book_barcode",unique = true, nullable = false)
     private String bookBarcode;
-
-    @Column(nullable = false)
-    private String rackLocation;
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    @ManyToOne
-    @JoinColumn(name = "library_id", nullable = false)
-    private Library library;
-
     private double price;
 
-    private String format;
+    @Enumerated(EnumType.STRING)
+    private Format format;
+
+    @ManyToOne
+    @JoinColumn(name = "rack_id", nullable = false)
+    private Rack rack;
 
     private String status;
 
+    @Column(name = "borrow_date")
     private LocalDate borrowDate;
 
+    @Column(name = "due_date")
     private LocalDate dueDate;
 
+    @Column(name = "date_of_purchase")
     private LocalDate dateOfPurchase;
 
+    @Column(name = "publication_date")
     private LocalDate publicationDate;
+
 }

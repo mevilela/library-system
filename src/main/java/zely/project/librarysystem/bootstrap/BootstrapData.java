@@ -158,6 +158,7 @@ public class BootstrapData implements CommandLineRunner {
             library1.setAddress("rua das flores, 10");
             library1.setName("Library 1");
             libraryCard.setLibrary(library1);
+            libraryCard.setBarcode("45454867654116");
             libraryRepository.save(library1);
             cardRepository.save(libraryCard);
 

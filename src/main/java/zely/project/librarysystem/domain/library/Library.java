@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import zely.project.librarysystem.domain.Book.BookItem;
 import zely.project.librarysystem.domain.card.LibraryCard;
 
 import java.util.HashSet;
@@ -26,11 +25,10 @@ public class Library {
 
     private String address;
 
-    @OneToMany(mappedBy = "library")
+    @OneToMany(mappedBy = "library", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<LibraryCard> libraryCards = new HashSet<>();;
 
-    @OneToMany(mappedBy = "library")
-    private Set<BookItem> bookItems = new HashSet<>();
-
+    @OneToMany(mappedBy = "library", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private Set<Rack> racks = new HashSet<>();
 
 }

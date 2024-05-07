@@ -20,11 +20,14 @@ public class LibraryCard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "card_number")
     private Integer cardNumber;
+
+    @Column(unique = true, nullable = false)
     private String barcode;
 
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDate issuedAt;
+
     private boolean active;
 
     @ManyToOne

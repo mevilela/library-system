@@ -1,4 +1,4 @@
-package zely.project.librarysystem.domain.Book;
+package zely.project.librarysystem.domain.book;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,9 +24,15 @@ public class Book {
     @Column(nullable = false)
     private String title;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private Author author;
+    @Builder.Default
+    @ManyToMany
+    @JoinTable(
+            name = "author_book",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+
+    private Set<Author> authors = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "publisher_id", nullable = false)
@@ -38,10 +44,10 @@ public class Book {
     @Column(nullable = false)
     private String language;
 
-    @Column(nullable = false)
+    @Column(name ="number_of_pages", nullable = false)
     private Integer numberOfPages;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<BookItem> bookItemSet = new HashSet<>();
 
 }
