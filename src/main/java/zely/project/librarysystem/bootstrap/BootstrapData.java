@@ -8,8 +8,10 @@ import org.springframework.util.ResourceUtils;
 import zely.project.librarysystem.csv.AccountCsvRecord;
 import zely.project.librarysystem.csv.LibraryCSVRecord;
 import zely.project.librarysystem.domain.account.*;
+import zely.project.librarysystem.domain.card.LibraryCard;
 import zely.project.librarysystem.domain.library.Library;
 import zely.project.librarysystem.repository.account.AccountRepository;
+import zely.project.librarysystem.repository.card.LibraryCardRepository;
 import zely.project.librarysystem.repository.library.LibraryRepository;
 import zely.project.librarysystem.service.account.AccountCsvService;
 import zely.project.librarysystem.service.library.LibraryCsvService;
@@ -31,6 +33,7 @@ public class BootstrapData implements CommandLineRunner {
     private final AccountRepository accountRepository;
     private final LibraryCsvService libraryCsvService;
     private final AccountCsvService accountCsvService;
+    private final LibraryCardRepository cardRepository;
 
     @Transactional
     @Override
@@ -150,8 +153,13 @@ public class BootstrapData implements CommandLineRunner {
     private void loadLibraryData(){
 
         if (libraryRepository.count() == 0){
-            Library library1 = new Library("Library 1", "Rua das Flores, 10");
+            Library library1 = new Library();
+            LibraryCard libraryCard = new LibraryCard();
+            library1.setAddress("rua das flores, 10");
+            library1.setName("Library 1");
+            libraryCard.setLibrary(library1);
             libraryRepository.save(library1);
+            cardRepository.save(libraryCard);
 
         }
     }

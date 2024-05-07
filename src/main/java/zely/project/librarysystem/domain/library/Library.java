@@ -1,11 +1,21 @@
 package zely.project.librarysystem.domain.library;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import zely.project.librarysystem.domain.Book.BookItem;
+import zely.project.librarysystem.domain.card.LibraryCard;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Library {
 
     @Id
@@ -16,33 +26,11 @@ public class Library {
 
     private String address;
 
+    @OneToMany(mappedBy = "library")
+    private Set<LibraryCard> libraryCards = new HashSet<>();;
 
-    public Library() {
-    }
-
-    public Library(String name, String address) {
-        this.name = name;
-        this.address = address;
-    }
-
-    public Integer getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "library")
+    private Set<BookItem> bookItems = new HashSet<>();
 
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 }

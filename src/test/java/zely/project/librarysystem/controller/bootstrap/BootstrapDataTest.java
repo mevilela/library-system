@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import zely.project.librarysystem.bootstrap.BootstrapData;
 import zely.project.librarysystem.repository.account.AccountRepository;
+import zely.project.librarysystem.repository.card.LibraryCardRepository;
 import zely.project.librarysystem.repository.library.LibraryRepository;
 import zely.project.librarysystem.service.account.AccountCsvService;
 import zely.project.librarysystem.service.account.AccountCsvServiceImpl;
@@ -30,11 +31,14 @@ public class BootstrapDataTest {
     @Autowired
     AccountCsvService accountCsvService;
 
+    @Autowired
+    LibraryCardRepository cardRepository;
+
     BootstrapData bootstrapData;
 
     @BeforeEach
     void setUp() {
-        bootstrapData = new BootstrapData(libraryRepository, accountRepository, libraryCsvService, accountCsvService);
+        bootstrapData = new BootstrapData(libraryRepository, accountRepository, libraryCsvService, accountCsvService, cardRepository);
     }
 
     @Test
