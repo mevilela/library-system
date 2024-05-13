@@ -2,9 +2,13 @@ package zely.project.librarysystem.domain.book;
 
 import jakarta.persistence.*;
 import lombok.*;
+import zely.project.librarysystem.domain.booking.Lending;
+import zely.project.librarysystem.domain.booking.Reservation;
 import zely.project.librarysystem.domain.library.Rack;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -34,7 +38,9 @@ public class BookItem {
     @JoinColumn(name = "rack_id", nullable = false)
     private Rack rack;
 
-    private String status;
+    @Column(name = "book_status")
+    @Enumerated(EnumType.STRING)
+    private BookStatus status;
 
     @Column(name = "borrow_date")
     private LocalDate borrowDate;
@@ -47,5 +53,11 @@ public class BookItem {
 
     @Column(name = "publication_date")
     private LocalDate publicationDate;
+
+    @OneToMany(mappedBy = "bookItem", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private Set<Reservation> reservations = new HashSet<>();
+
+    @OneToMany(mappedBy = "bookItem", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private Set<Lending> lendings = new HashSet<>();
 
 }

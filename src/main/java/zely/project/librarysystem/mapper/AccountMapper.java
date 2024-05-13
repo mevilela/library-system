@@ -24,7 +24,7 @@ public interface AccountMapper {
         } else if (accountDto.getAccountType() == AccountType.LIBRARIAN) {
             return new Librarian();
         } else {
-            throw new IllegalArgumentException("Tipo de conta desconhecido");
+            throw new IllegalArgumentException("unkown account type");
         }
     }
 }

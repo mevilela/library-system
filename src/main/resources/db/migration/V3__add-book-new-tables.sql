@@ -50,7 +50,7 @@ CREATE TABLE `book_item`(
                             rack_id INTEGER NOT NULL,
                             price FLOAT NOT NULL,
                             format ENUM('HARDCOVER','PAPERBACK','AUDIOBOOK','EBOOK','NEWSPAPER','MAGAZINE','JOURNAL') NOT NULL,
-                            status VARCHAR(56) NOT NULL,
+                            book_status ENUM( 'AVAILABLE','RESERVED','LOANED','LOST') NOT NULL,
                             borrow_date DATE NOT NULL,
                             due_date DATE NOT NULL,
                             date_of_purchase DATE NOT NULL,

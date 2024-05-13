@@ -1,11 +1,21 @@
-package zely.project.librarysystem.repository.book;
+package zely.project.librarysystem.repository.booking;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import zely.project.librarysystem.domain.account.Account;
+import zely.project.librarysystem.domain.account.AccountType;
 import zely.project.librarysystem.domain.book.*;
+import zely.project.librarysystem.domain.booking.Reservation;
+import zely.project.librarysystem.domain.card.LibraryCard;
 import zely.project.librarysystem.domain.library.Rack;
+import zely.project.librarysystem.repository.account.AccountRepository;
+import zely.project.librarysystem.repository.book.AuthorRepository;
+import zely.project.librarysystem.repository.book.BookItemRepository;
+import zely.project.librarysystem.repository.book.BookRepository;
+import zely.project.librarysystem.repository.book.PublisherRepository;
+import zely.project.librarysystem.repository.card.LibraryCardRepository;
 import zely.project.librarysystem.repository.library.LibraryRepository;
 import zely.project.librarysystem.repository.library.RackRepository;
 
@@ -13,11 +23,14 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-class BookItemRepositoryTest {
+class ReservationRepositoryTest {
+
+    @Autowired
+    ReservationRepository reservationRepository;
+
     @Autowired
     BookItemRepository bookItemRepository;
 
@@ -34,11 +47,33 @@ class BookItemRepositoryTest {
     @Autowired
     LibraryRepository libraryRepository;
 
+    @Autowired
+    LibraryCardRepository cardRepository;
+
+    @Autowired
+    AccountRepository accountRepository;
+
     @Transactional
     @Test
-    void testGivingABookToBookItem() {
+    void testSaveReservation() {
         Set<Book> books = new HashSet<>();
         Set<Author> authors = new HashSet<>();
+        Set<LibraryCard> cards = new HashSet<>();
+        Set<Reservation> reservations = new HashSet<>();
+
+        Account member = accountRepository.findAllByAccountType(AccountType.MEMBER).get(1);
+
+        LibraryCard card = LibraryCard.builder()
+                .account(member)
+                .reservations(reservations)
+                .active(true)
+                .barcode("123456789")
+                .lendings(null)
+                .issuedAt(LocalDate.of(2023,10,10))
+                .library(libraryRepository.findById(1).get())
+                .build();
+
+        cardRepository.save(card);
 
         Author johnAdams = Author.builder()
                 .books(books)
@@ -95,10 +130,16 @@ class BookItemRepositoryTest {
 
         bookItemRepository.save(bookItem);
 
-        assertNotNull(beHappy.getId(), "O livro deveria ter um ID após ser salvo.");
 
-        assertTrue(johnAdams.getBooks().size() > 0, "O autor deveria ter pelo menos um livro.");
+        Reservation reservation = Reservation.builder()
+                .creationDate(LocalDate.of(2024,11,05))
+                .bookItem(bookItem)
+                .libraryCard(card)
+                .active(true)
+                .build();
 
-        assertThat(bookItem.getBook().getTitle()).isEqualTo(beHappy.getTitle());
+        reservationRepository.save(reservation);
+
+        assertNotNull(reservation.getId());
     }
 }

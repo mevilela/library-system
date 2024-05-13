@@ -1,12 +1,12 @@
 package zely.project.librarysystem.domain.account;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import zely.project.librarysystem.domain.booking.Lending;
+import zely.project.librarysystem.domain.booking.Reservation;
 import zely.project.librarysystem.domain.card.LibraryCard;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,6 +14,8 @@ import java.util.Set;
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class Account {
 
     @Id
@@ -32,18 +34,6 @@ public abstract class Account {
     private Person person;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private Set<LibraryCard> libraryCards;
+    private Set<LibraryCard> libraryCards = new HashSet<>();;
 
-
-    public Account() {
-    }
-
-    public Account(Integer id, String password, AccountType accountType, AccountStatus accountStatus, Person person, Set<LibraryCard> libraryCards) {
-        this.id = id;
-        this.password = password;
-        this.accountType = accountType;
-        this.accountStatus = accountStatus;
-        this.person = person;
-        this.libraryCards = libraryCards;
-    }
 }
