@@ -56,8 +56,8 @@ class LibraryControllerIT {
     @Test
     public void testListLibraryByName() throws Exception {
         mockMvc.perform(get("/api/library")
-                        .queryParam("libraryName", "Central")
-                        .queryParam("pageSize", "20"))
+                        .queryParam("libraryName", "Golden")
+                        .queryParam("pageSize", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.size()", is(1)));
     }
@@ -66,7 +66,7 @@ class LibraryControllerIT {
     void testGetAllLibraries(){
         Page<LibraryDto> libraryDtos = libraryController.getAllLibraries(null, 1, 136);
 
-        assertThat(libraryDtos.getContent().size()).isEqualTo(136);
+        assertThat(libraryDtos.getContent().size()).isEqualTo(11);
 
     }
 

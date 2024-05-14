@@ -1,8 +1,7 @@
 package zely.project.librarysystem.service.library;
 
 import org.springframework.stereotype.Service;
-import zely.project.librarysystem.domain.library.Rack;
-import zely.project.librarysystem.dto.library.LibraryDto;
+import zely.project.librarysystem.domain.library.LibraryCode;
 import zely.project.librarysystem.dto.library.RackDto;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public interface RackService {
 
     Optional<RackDto> getRackById(Integer id);
 
-    Optional<RackDto> getRackByLibrary(LibraryDto libraryDto);
+    List<RackDto> getRackByLibraryCode(LibraryCode libraryCode);
 
     Optional<RackDto> getRackBySection(String section);
 
@@ -23,7 +22,7 @@ public interface RackService {
 
     Optional<RackDto> updateRackbyId(Integer id, RackDto rackDto);
 
-    void deleteRackById(Integer id);
+    boolean deleteRackById(Integer id);
 
 
 }

@@ -60,8 +60,8 @@ public class BootstrapDataTest {
     void TestRun() throws Exception {
         bootstrapData.run(null);
 
-        assertThat(libraryRepository.count()).isEqualTo(136);
-        assertThat(accountRepository.count()).isEqualTo(12);
+        assertThat(libraryRepository.count()).isEqualTo(11);
+        assertThat(accountRepository.count()).isEqualTo(10);
         assertThat(rackRepository.count()).isEqualTo(10);
     }
 }

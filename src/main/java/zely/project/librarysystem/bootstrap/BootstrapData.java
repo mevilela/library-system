@@ -182,30 +182,33 @@ public class BootstrapData implements CommandLineRunner {
 
     private void loadRackCsvData() throws FileNotFoundException{
 
-        File file = ResourceUtils.getFile("classpath:csvdata/rack-data.csv");
-        List<RackCsvRecord> rackRecords = rackCsvService.convertCSV(file);
+        if (rackRepository.count() == 0){
+            File file = ResourceUtils.getFile("classpath:csvdata/rack-data.csv");
+            List<RackCsvRecord> rackRecords = rackCsvService.convertCSV(file);
 
-        for (RackCsvRecord record : rackRecords){
-            Rack rack = new Rack();
+            for (RackCsvRecord record : rackRecords){
+                Rack rack = new Rack();
 
-            rack.setRackNumber(record.getRackNumber());
-            rack.setLocation(record.getLocation());
-            rack.setSection(record.getSection());
+                rack.setRackNumber(record.getRackNumber());
+                rack.setLocation(record.getLocation());
+                rack.setSection(record.getSection());
 
-            LibraryCode libraryCode = new LibraryCode();
-            libraryCode.setCodeId(record.getLibraryCode());
+                LibraryCode libraryCode = new LibraryCode();
+                libraryCode.setCodeId(record.getLibraryCode());
 
-            libraryCodeRepository.save(libraryCode);
+                libraryCodeRepository.save(libraryCode);
 
-            Optional<LibraryCode> libraryCodeOptional = libraryCodeRepository.findById(libraryCode.getCodeId());
-            if (libraryCodeOptional.isPresent()) {
-                rack.setLibraryCode(libraryCodeOptional.get());
+                Optional<LibraryCode> libraryCodeOptional = libraryCodeRepository.findById(libraryCode.getCodeId());
+                if (libraryCodeOptional.isPresent()) {
+                    rack.setLibraryCode(libraryCodeOptional.get());
+                    rackRepository.save(rack);
+                } else {
+                    throw new NotFoundException("Library not found for rack with code: " + record.getLibraryCode());
+                }
+
                 rackRepository.save(rack);
-            } else {
-                throw new NotFoundException("Library not found for rack with code: " + record.getLibraryCode());
             }
 
-            rackRepository.save(rack);
         }
 
     }
