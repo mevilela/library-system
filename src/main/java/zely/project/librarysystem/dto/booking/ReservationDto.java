@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import zely.project.librarysystem.dto.book.BookItemDto;
-import zely.project.librarysystem.dto.card.LibraryCardDto;
+import zely.project.librarysystem.dto.card.CardDto;
 
 import java.time.LocalDate;
 
@@ -25,6 +25,6 @@ public class ReservationDto {
 
     private BookItemDto bookItem;
 
-    private LibraryCardDto libraryCard;
+    private CardDto libraryCard;
 
 }

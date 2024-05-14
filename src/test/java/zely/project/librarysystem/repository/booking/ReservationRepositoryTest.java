@@ -8,14 +8,14 @@ import zely.project.librarysystem.domain.account.Account;
 import zely.project.librarysystem.domain.account.AccountType;
 import zely.project.librarysystem.domain.book.*;
 import zely.project.librarysystem.domain.booking.Reservation;
-import zely.project.librarysystem.domain.card.LibraryCard;
+import zely.project.librarysystem.domain.card.Card;
 import zely.project.librarysystem.domain.library.Rack;
 import zely.project.librarysystem.repository.account.AccountRepository;
 import zely.project.librarysystem.repository.book.AuthorRepository;
 import zely.project.librarysystem.repository.book.BookItemRepository;
 import zely.project.librarysystem.repository.book.BookRepository;
 import zely.project.librarysystem.repository.book.PublisherRepository;
-import zely.project.librarysystem.repository.card.LibraryCardRepository;
+import zely.project.librarysystem.repository.card.CardRepository;
 import zely.project.librarysystem.repository.library.LibraryRepository;
 import zely.project.librarysystem.repository.library.RackRepository;
 
@@ -48,7 +48,7 @@ class ReservationRepositoryTest {
     LibraryRepository libraryRepository;
 
     @Autowired
-    LibraryCardRepository cardRepository;
+    CardRepository cardRepository;
 
     @Autowired
     AccountRepository accountRepository;
@@ -58,12 +58,12 @@ class ReservationRepositoryTest {
     void testSaveReservation() {
         Set<Book> books = new HashSet<>();
         Set<Author> authors = new HashSet<>();
-        Set<LibraryCard> cards = new HashSet<>();
+        Set<Card> cards = new HashSet<>();
         Set<Reservation> reservations = new HashSet<>();
 
         Account member = accountRepository.findAllByAccountType(AccountType.MEMBER).get(1);
 
-        LibraryCard card = LibraryCard.builder()
+        Card card = Card.builder()
                 .account(member)
                 .reservations(reservations)
                 .active(true)
@@ -133,7 +133,7 @@ class ReservationRepositoryTest {
         Reservation reservation = Reservation.builder()
                 .creationDate(LocalDate.of(2024,11,05))
                 .bookItem(bookItem)
-                .libraryCard(card)
+                .card(card)
                 .active(true)
                 .build();
 

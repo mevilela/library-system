@@ -7,19 +7,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 import org.webjars.NotFoundException;
 import zely.project.librarysystem.csv.AccountCsvRecord;
+import zely.project.librarysystem.csv.CardCsvRecord;
 import zely.project.librarysystem.csv.LibraryCSVRecord;
 import zely.project.librarysystem.csv.RackCsvRecord;
 import zely.project.librarysystem.domain.account.*;
-import zely.project.librarysystem.domain.card.LibraryCard;
+import zely.project.librarysystem.domain.card.Card;
 import zely.project.librarysystem.domain.library.Library;
 import zely.project.librarysystem.domain.library.LibraryCode;
 import zely.project.librarysystem.domain.library.Rack;
 import zely.project.librarysystem.repository.account.AccountRepository;
-import zely.project.librarysystem.repository.card.LibraryCardRepository;
+import zely.project.librarysystem.repository.card.CardRepository;
 import zely.project.librarysystem.repository.library.LibraryCodeRepository;
 import zely.project.librarysystem.repository.library.LibraryRepository;
 import zely.project.librarysystem.repository.library.RackRepository;
 import zely.project.librarysystem.service.account.AccountCsvService;
+import zely.project.librarysystem.service.card.CardCsvService;
 import zely.project.librarysystem.service.library.LibraryCsvService;
 import zely.project.librarysystem.service.library.RackCsvService;
 
@@ -44,23 +46,25 @@ public class BootstrapData implements CommandLineRunner {
     private final AccountCsvService accountCsvService;
     private final RackRepository rackRepository;
     private final RackCsvService rackCsvService;
-    private final LibraryCardRepository cardRepository;
+    private final CardRepository cardRepository;
+    private final CardCsvService cardCsvService;
     private final LibraryCodeRepository libraryCodeRepository;
 
 
     @Transactional
     @Override
-    public void run(java.lang.String... args) throws Exception {
+    public void run(String... args) throws Exception {
         loadLibraryData();
         loadLibraryCsvData();
         loadAccountData();
         loadAccountCsvData();
         loadRackCsvData();
+        loadCardCsvData();
     }
 
 
     private void loadLibraryCsvData() throws FileNotFoundException {
-        if (libraryRepository.count() < 10) {
+        if (libraryRepository.count() < 1) {
             File file = ResourceUtils.getFile("classpath:csvdata/library-data.csv");
             List<LibraryCSVRecord> recs = libraryCsvService.convertCSV(file);
 
@@ -75,7 +79,7 @@ public class BootstrapData implements CommandLineRunner {
     }
 
     private void loadAccountCsvData() throws FileNotFoundException{
-        if (accountRepository.count() < 12){
+        if (accountRepository.count() < 1){
             File file = ResourceUtils.getFile("classpath:csvdata/account-data.csv");
             List<AccountCsvRecord> accountRecs = accountCsvService.convertCSV(file);
 
@@ -138,12 +142,13 @@ public class BootstrapData implements CommandLineRunner {
 
     private void loadAccountData(){
 
-        if (libraryRepository.count() == 0){
+        if (libraryRepository.count() < 1){
 
             Person maria = new Person("Maria", "Rua Paissandu 344", "maria@gmail.com", "99199-2032");
 
             Member member = new Member();
             member.setPerson(maria);
+            member.setId(88);
             member.setAccountType(MEMBER);
             member.setAccountStatus(AccountStatus.ACTIVE);
             member.setPassword("123");
@@ -152,6 +157,7 @@ public class BootstrapData implements CommandLineRunner {
 
             Person joao = new Person("Joao", "Rua Paissandu 344", "joao@gmail.com", "99199-0000");
             Librarian librarian = new Librarian();
+            librarian.setId(99);
             librarian.setPerson(joao);
             librarian.setDepartment("science");
             librarian.setAccountStatus(AccountStatus.ACTIVE);
@@ -167,15 +173,15 @@ public class BootstrapData implements CommandLineRunner {
     private void loadLibraryData(){
 
 
-        if (libraryRepository.count() == 0){
+        if (libraryRepository.count() < 0){
             Library library1 = new Library();
-            LibraryCard libraryCard = new LibraryCard();
+            Card card = new Card();
             library1.setAddress("rua das flores, 10");
             library1.setName("Library 1");
-            libraryCard.setLibrary(library1);
-            libraryCard.setBarcode("45454867654116");
+            card.setLibrary(library1);
+            card.setBarcode("45454867654116");
             libraryRepository.save(library1);
-            cardRepository.save(libraryCard);
+            cardRepository.save(card);
 
         }
     }
@@ -210,6 +216,37 @@ public class BootstrapData implements CommandLineRunner {
             }
 
         }
+    }
+
+    private void loadCardCsvData() throws FileNotFoundException {
+        if (cardRepository.count() < 10){
+
+            File file = ResourceUtils.getFile("classpath:csvdata/card-data.csv");
+            List<CardCsvRecord> cardCsvRecords = cardCsvService.convertCSV(file);
+
+            for (CardCsvRecord cardRecords : cardCsvRecords){
+                Card card = new Card();
+
+                card.setBarcode(cardRecords.getBarcode());
+                card.setActive(cardRecords.isActive());
+                card.setIssuedAt(cardRecords.getIssuedAt());
+
+                Library library = new Library();
+                library.setId(cardRecords.getId());
+
+                card.setLibrary(library);
+
+                Account account = accountRepository.findById(cardRecords.getAccountId())
+                        .orElseThrow(() -> new NotFoundException("Account not found"));
+
+                card.setAccount(account);
+
+                cardRepository.save(card);
+
+            }
+
+        }
 
     }
+
 }

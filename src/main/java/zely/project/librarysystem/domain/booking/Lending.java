@@ -3,11 +3,8 @@ package zely.project.librarysystem.domain.booking;
 
 import jakarta.persistence.*;
 import lombok.*;
-import zely.project.librarysystem.domain.account.Account;
-import zely.project.librarysystem.domain.account.AccountType;
-import zely.project.librarysystem.domain.account.Member;
 import zely.project.librarysystem.domain.book.BookItem;
-import zely.project.librarysystem.domain.card.LibraryCard;
+import zely.project.librarysystem.domain.card.Card;
 
 import java.time.LocalDate;
 
@@ -35,7 +32,7 @@ public class Lending {
 
     @ManyToOne
     @JoinColumn(name = "library_card_id")
-    private LibraryCard libraryCard;
+    private Card card;
 
 }
 

@@ -2,9 +2,7 @@ package zely.project.librarysystem.domain.account;
 
 import jakarta.persistence.*;
 import lombok.*;
-import zely.project.librarysystem.domain.booking.Lending;
-import zely.project.librarysystem.domain.booking.Reservation;
-import zely.project.librarysystem.domain.card.LibraryCard;
+import zely.project.librarysystem.domain.card.Card;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,6 +32,6 @@ public abstract class Account {
     private Person person;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private Set<LibraryCard> libraryCards = new HashSet<>();;
+    private Set<Card> cards = new HashSet<>();;
 
 }

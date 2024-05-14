@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class LibraryCardDto {
+public class CardDto {
     private Integer id;
 
     private String barcode;

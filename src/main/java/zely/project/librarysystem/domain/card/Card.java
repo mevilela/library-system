@@ -18,7 +18,8 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LibraryCard {
+@Table(name = "library_card")
+public class Card {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +32,7 @@ public class LibraryCard {
     @Column(updatable = false)
     private LocalDate issuedAt;
 
+    @Column(name = "active")
     private boolean active;
 
     @ManyToOne
@@ -41,10 +43,10 @@ public class LibraryCard {
     @JoinColumn(name = "library_id")
     private Library library;
 
-    @OneToMany(mappedBy = "libraryCard", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "card", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<Reservation> reservations = new HashSet<>();
 
-    @OneToMany(mappedBy = "libraryCard", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(mappedBy = "card", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<Lending> lendings = new HashSet<>();
 
 }
