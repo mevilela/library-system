@@ -23,15 +23,17 @@ public class Rack {
     @Column(name = "rack_number", nullable = false, unique = true)
     private Integer rackNumber;
 
+    @Column(name = "location")
     private String location;
 
+    @Column(name = "section")
     private String section;
 
     @ManyToOne
-    @JoinColumn(name = "library_id")
-    private Library library;
+    @JoinColumn(name = "library_code_id")
+    private LibraryCode libraryCode;
 
-    @Builder.Default
     @OneToMany(mappedBy = "rack")
     private Set<BookItem> bookItemSet = new HashSet<>();
+
 }

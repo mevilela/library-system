@@ -1,14 +1,14 @@
 package zely.project.librarysystem.controller.library;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import zely.project.librarysystem.mapper.RackMapper;
+import zely.project.librarysystem.dto.library.RackDto;
 import zely.project.librarysystem.repository.library.RackRepository;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class RackControllerIT {
@@ -19,25 +19,15 @@ class RackControllerIT {
     @Autowired
     RackRepository rackRepository;
 
-    @Autowired
-    RackMapper rackMapper;
-
-
-    @Autowired
-    WebApplicationContext wac;
-
-    MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-    }
 
 
     @Test
     void testGetAllRacks() {
 
+        List<RackDto> rackDtoList = rackController.getAllRacks();
 
-    }
+        assertThat(rackDtoList.size()).isNotNull();
+
+
     }
 }

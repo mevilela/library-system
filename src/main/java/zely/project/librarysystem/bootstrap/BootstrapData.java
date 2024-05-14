@@ -5,22 +5,30 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
+import org.webjars.NotFoundException;
 import zely.project.librarysystem.csv.AccountCsvRecord;
 import zely.project.librarysystem.csv.LibraryCSVRecord;
+import zely.project.librarysystem.csv.RackCsvRecord;
 import zely.project.librarysystem.domain.account.*;
 import zely.project.librarysystem.domain.card.LibraryCard;
 import zely.project.librarysystem.domain.library.Library;
+import zely.project.librarysystem.domain.library.LibraryCode;
+import zely.project.librarysystem.domain.library.Rack;
 import zely.project.librarysystem.repository.account.AccountRepository;
 import zely.project.librarysystem.repository.card.LibraryCardRepository;
+import zely.project.librarysystem.repository.library.LibraryCodeRepository;
 import zely.project.librarysystem.repository.library.LibraryRepository;
+import zely.project.librarysystem.repository.library.RackRepository;
 import zely.project.librarysystem.service.account.AccountCsvService;
 import zely.project.librarysystem.service.library.LibraryCsvService;
+import zely.project.librarysystem.service.library.RackCsvService;
 
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static zely.project.librarysystem.domain.account.AccountType.LIBRARIAN;
 import static zely.project.librarysystem.domain.account.AccountType.MEMBER;
@@ -29,21 +37,27 @@ import static zely.project.librarysystem.domain.account.AccountType.MEMBER;
 @RequiredArgsConstructor
 public class BootstrapData implements CommandLineRunner {
 
+
     private final LibraryRepository libraryRepository;
-    private final AccountRepository accountRepository;
     private final LibraryCsvService libraryCsvService;
+    private final AccountRepository accountRepository;
     private final AccountCsvService accountCsvService;
+    private final RackRepository rackRepository;
+    private final RackCsvService rackCsvService;
     private final LibraryCardRepository cardRepository;
+    private final LibraryCodeRepository libraryCodeRepository;
+
 
     @Transactional
     @Override
     public void run(java.lang.String... args) throws Exception {
-        loadAccountData();
         loadLibraryData();
         loadLibraryCsvData();
+        loadAccountData();
         loadAccountCsvData();
-
+        loadRackCsvData();
     }
+
 
     private void loadLibraryCsvData() throws FileNotFoundException {
         if (libraryRepository.count() < 10) {
@@ -54,8 +68,8 @@ public class BootstrapData implements CommandLineRunner {
                 Library library = new Library();
                 library.setName(record.getName());
                 library.setAddress(record.getAddress());
-
                 libraryRepository.save(library);
+
             }
         }
     }
@@ -152,6 +166,7 @@ public class BootstrapData implements CommandLineRunner {
 
     private void loadLibraryData(){
 
+
         if (libraryRepository.count() == 0){
             Library library1 = new Library();
             LibraryCard libraryCard = new LibraryCard();
@@ -165,5 +180,33 @@ public class BootstrapData implements CommandLineRunner {
         }
     }
 
-};
+    private void loadRackCsvData() throws FileNotFoundException{
 
+        File file = ResourceUtils.getFile("classpath:csvdata/rack-data.csv");
+        List<RackCsvRecord> rackRecords = rackCsvService.convertCSV(file);
+
+        for (RackCsvRecord record : rackRecords){
+            Rack rack = new Rack();
+
+            rack.setRackNumber(record.getRackNumber());
+            rack.setLocation(record.getLocation());
+            rack.setSection(record.getSection());
+
+            LibraryCode libraryCode = new LibraryCode();
+            libraryCode.setCodeId(record.getLibraryCode());
+
+            libraryCodeRepository.save(libraryCode);
+
+            Optional<LibraryCode> libraryCodeOptional = libraryCodeRepository.findById(libraryCode.getCodeId());
+            if (libraryCodeOptional.isPresent()) {
+                rack.setLibraryCode(libraryCodeOptional.get());
+                rackRepository.save(rack);
+            } else {
+                throw new NotFoundException("Library not found for rack with code: " + record.getLibraryCode());
+            }
+
+            rackRepository.save(rack);
+        }
+
+    }
+}

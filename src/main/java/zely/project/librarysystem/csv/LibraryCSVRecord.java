@@ -18,4 +18,8 @@ public class LibraryCSVRecord {
 
     @CsvBindByName
     private String address;
+
+    @CsvBindByName(column = "code_id")
+    private Integer libraryCode;
+
 }

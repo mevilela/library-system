@@ -18,7 +18,7 @@ CREATE TABLE `publisher`(
                             PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE `Book`(
+CREATE TABLE `book`(
                        id INTEGER AUTO_INCREMENT NOT NULL,
                        isbn VARCHAR(26) UNIQUE NOT NULL,
                        title VARCHAR(255) NOT NULL,
@@ -30,16 +30,23 @@ CREATE TABLE `Book`(
                        CONSTRAINT FOREIGN KEY (publisher_id) REFERENCES  publisher(id)
 ) ENGINE = InnoDB;
 
+CREATE TABLE `library_code`(
+    code_id INTEGER,
+    library_id INTEGER,
+    PRIMARY KEY (code_id),
+    CONSTRAINT FOREIGN KEY (library_id) REFERENCES  library(id)
+
+) ENGINE = InnoDB;
+
 
 CREATE TABLE `rack` (
                         id INTEGER AUTO_INCREMENT NOT NULL,
                         rack_number INTEGER UNIQUE NOT NULL,
                         location VARCHAR(56) NOT NULL,
-                        section VARCHAR(56) NOT NULL,
-                        library_id INTEGER NOT NULL,
+                        section VARCHAR(56),
+                        library_code_id INTEGER,
                         PRIMARY KEY (id),
-                        CONSTRAINT FOREIGN KEY (library_id) REFERENCES  library(id)
-
+                        FOREIGN KEY (library_code_id) REFERENCES library_code(code_id)
 ) ENGINE = InnoDB;
 
 
@@ -66,6 +73,8 @@ CREATE TABLE author_book (
                              PRIMARY KEY (author_id, book_id),
                              FOREIGN KEY (author_id) REFERENCES author(id),
                              FOREIGN KEY (book_id) REFERENCES book(id)
-);
+)ENGINE = InnoDB;
+
+
 
 

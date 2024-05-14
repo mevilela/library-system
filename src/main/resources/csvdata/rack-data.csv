@@ -1,0 +1,11 @@
+library_code,rack_number,location,section
+1001,101,"Main Section","Fiction"
+1001,102,"Second Floor","Non-Fiction"
+1002,103,"Children's Section","Children's Books"
+1002,104,"Third Floor","Science"
+1003,105,"Reference Section","Reference Books"
+1003,106,"First Floor","Mystery"
+1004,107,"Teen Section","Young Adult"
+1004,108,"Basement","Horror"
+1005,109,"Music Section","Music"
+1005,110,"DVD Section","Movies"

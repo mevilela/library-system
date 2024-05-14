@@ -1,6 +1,5 @@
 package zely.project.librarysystem.dto.library;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,11 +9,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
-public class LibraryDto {
-    private Integer id;
+public class LibraryCodeDto {
 
-    private String name;
+    private Integer codeId;
 
-    private String address;
+    private LibraryDto Dto;
 
 }

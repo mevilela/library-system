@@ -28,7 +28,8 @@ public class Library {
     @OneToMany(mappedBy = "library", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<LibraryCard> libraryCards = new HashSet<>();;
 
-    @OneToMany(mappedBy = "library", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private Set<Rack> racks = new HashSet<>();
+    @OneToOne(mappedBy = "library")
+    private LibraryCode libraryCode;
 
 }
+

@@ -74,7 +74,6 @@ class BookItemRepositoryTest {
                 .rackNumber(12)
                 .section("zone A")
                 .location("first floor")
-                .library(libraryRepository.findById(1).get())
                 .build();
 
         rackRepository.save(rack);

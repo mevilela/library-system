@@ -2,9 +2,10 @@ drop table if exists library;
 drop table if exists account;
 
 CREATE TABLE library(
-                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        id INT AUTO_INCREMENT,
                         name VARCHAR(80) NOT NULL,
-                        address VARCHAR(255) NOT NULL
+                        address VARCHAR(255) NOT NULL,
+                        PRIMARY KEY (id)
 );
 
 CREATE TABLE account(
