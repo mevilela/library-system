@@ -99,9 +99,9 @@ class CardControllerIT {
         Card card = cardRepository.findAll().get(1);
         CardDto cardDto = cardMapper.toCardDto(card);
 
-        final String newBarcode = "newBarCode123";
+        AccountDto member = new MemberDto();
 
-        cardDto.setBarcode(newBarcode);
+        cardDto.setAccount(member);
 
 
         ResponseEntity responseEntity = cardController.updateCardById(card.getId(), cardDto);
@@ -110,8 +110,7 @@ class CardControllerIT {
 
         Card updatedCard = cardRepository.findById(card.getId()).get();
 
-        assertThat(updatedCard.getBarcode()).isEqualTo(newBarcode);
-
+        assertThat(updatedCard.getAccount().getAccountType()).isEqualTo(AccountType.MEMBER);
 
     }
 

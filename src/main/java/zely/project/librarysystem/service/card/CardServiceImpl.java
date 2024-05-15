@@ -3,6 +3,8 @@ package zely.project.librarysystem.service.card;
 import org.springframework.stereotype.Service;
 import zely.project.librarysystem.domain.account.Account;
 import zely.project.librarysystem.domain.account.AccountType;
+import zely.project.librarysystem.domain.account.Librarian;
+import zely.project.librarysystem.domain.account.Member;
 import zely.project.librarysystem.domain.card.Card;
 import zely.project.librarysystem.domain.library.Library;
 import zely.project.librarysystem.dto.account.AccountDto;
@@ -65,41 +67,34 @@ public class CardServiceImpl implements CardService {
 
     }
 
-    @Override //todo
+    @Override
     public Optional<CardDto> updateCardById(Integer id, CardDto cardDto) {
+        return cardRepository.findById(id).map(foundCard -> {
+                    foundCard.setBarcode(cardDto.getBarcode());
+                    foundCard.setIssuedAt(cardDto.getIssuedAt());
+                    foundCard.setActive(cardDto.isActive());
+                    if (cardDto.getAccount() != null) {
+                        Account account = getAccount(cardDto);
+                        foundCard.setAccount(account);
+                    } else {
+                        throw new NullPointerException("Account cannot be null");
+                    }
 
-//        Card dtoToCard = cardMapper.toCardEntity(cardDto);
-//
-//        Account account = dtoToCard.getAccount();
-//        Library library = dtoToCard.getLibrary();
-
-        return cardRepository.findById(id).map(
-                        foundCard -> {
-                            foundCard.setBarcode(cardDto.getBarcode());
-                            foundCard.setIssuedAt(cardDto.getIssuedAt());
-
-                            return foundCard;
-                        }).map(cardRepository::save)
+                    return foundCard;
+                }).map(cardRepository::save)
                 .map(cardMapper::toCardDto);
+    }
 
+    private static Account getAccount(CardDto cardDto) {
+        AccountDto accountDto = cardDto.getAccount();
+        Account account = switch (accountDto.getAccountType()) {
+            case MEMBER -> new Member();
+            case LIBRARIAN -> new Librarian();
+            default -> throw new RuntimeException("Invalid account type");
+        };
 
-
-//        Optional<CardDto> optionalCardDto = cardRepository.findById(id)
-//                .map(foundCard -> {
-//                    foundCard.setActive(cardToBe.isActive());
-//                    foundCard.setIssuedAt(cardToBe.getIssuedAt());
-////                    foundCard.setAccount(cardToBe.getAccount().setAccountType(AccountType.MEMBER));
-//                    foundCard.setLibrary(cardToBe.getLibrary());
-//
-//                    return cardMapper.toCardDto(foundCard);
-//                });
-//
-//        Card cardToBeSaved = cardMapper.toCardEntity(optionalCardDto.get());
-//
-//        cardRepository.save(cardToBeSaved);
-//
-//        return Optional.ofNullable(cardMapper.toCardDto(cardToBeSaved));
-
+        account.setId(accountDto.getId());
+        return account;
     }
 
     @Override
