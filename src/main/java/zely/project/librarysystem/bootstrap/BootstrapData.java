@@ -6,21 +6,27 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 import org.webjars.NotFoundException;
-import zely.project.librarysystem.csv.AccountCsvRecord;
-import zely.project.librarysystem.csv.CardCsvRecord;
-import zely.project.librarysystem.csv.LibraryCSVRecord;
-import zely.project.librarysystem.csv.RackCsvRecord;
+import zely.project.librarysystem.csv.*;
 import zely.project.librarysystem.domain.account.*;
+import zely.project.librarysystem.domain.book.*;
 import zely.project.librarysystem.domain.card.Card;
 import zely.project.librarysystem.domain.library.Library;
 import zely.project.librarysystem.domain.library.LibraryCode;
 import zely.project.librarysystem.domain.library.Rack;
 import zely.project.librarysystem.repository.account.AccountRepository;
+import zely.project.librarysystem.repository.book.AuthorRepository;
+import zely.project.librarysystem.repository.book.BookItemRepository;
+import zely.project.librarysystem.repository.book.BookRepository;
+import zely.project.librarysystem.repository.book.PublisherRepository;
 import zely.project.librarysystem.repository.card.CardRepository;
 import zely.project.librarysystem.repository.library.LibraryCodeRepository;
 import zely.project.librarysystem.repository.library.LibraryRepository;
 import zely.project.librarysystem.repository.library.RackRepository;
 import zely.project.librarysystem.service.account.AccountCsvService;
+import zely.project.librarysystem.service.book.csv.AuthorCsvService;
+import zely.project.librarysystem.service.book.csv.BookCsvService;
+import zely.project.librarysystem.service.book.csv.BookItemCsvService;
+import zely.project.librarysystem.service.book.csv.PublisherCsvService;
 import zely.project.librarysystem.service.card.CardCsvService;
 import zely.project.librarysystem.service.library.LibraryCsvService;
 import zely.project.librarysystem.service.library.RackCsvService;
@@ -49,6 +55,14 @@ public class BootstrapData implements CommandLineRunner {
     private final CardRepository cardRepository;
     private final CardCsvService cardCsvService;
     private final LibraryCodeRepository libraryCodeRepository;
+    private final PublisherRepository publisherRepository;
+    private final PublisherCsvService publisherCsvService;
+    private final AuthorRepository authorRepository;
+    private final AuthorCsvService authorCsvService;
+    private final BookRepository bookRepository;
+    private final BookCsvService bookCsvService;
+    private final BookItemRepository bookItemRepository;
+    private final BookItemCsvService bookItemCsvService;
 
 
     @Transactional
@@ -60,6 +74,91 @@ public class BootstrapData implements CommandLineRunner {
         loadAccountCsvData();
         loadRackCsvData();
         loadCardCsvData();
+        loadPublisherCsvData();
+        loadAuthorCsvData();
+        loadBookCsvData();
+        loadBookItemCsvData();
+    }
+
+    private void loadBookItemCsvData() throws FileNotFoundException {
+        if (bookItemRepository.count() < 1) {
+            File file = ResourceUtils.getFile("classpath:csvdata/bookItem-data.csv");
+            List<BookItemCsvRecord> recs = bookItemCsvService.convertCSV(file);
+
+
+            for (BookItemCsvRecord record : recs){
+
+                Book book = new Book();
+                book.setId(record.getBookId());
+
+                Rack rack = new Rack();
+                rack.setId(record.getRackId());
+
+                BookItem bookItem = new BookItem();
+                bookItem.setBook(book);
+                bookItem.setRack(rack);
+                bookItem.setBookBarcode(record.getBookBarcode());
+                bookItem.setFormat(Format.valueOf(record.getFormat().toUpperCase()));
+                bookItem.setStatus(BookStatus.valueOf(record.getBookStatus().toUpperCase()));
+                bookItem.setBorrowDate(record.getBorrowDate());
+                bookItem.setDueDate(record.getDueDate());
+                bookItem.setDateOfPurchase(record.getDateOfPurchase());
+                bookItem.setPrice(record.getPrice());
+                bookItem.setPublicationDate(record.getPublicationDate());
+                bookItemRepository.save(bookItem);
+            }
+        }
+    }
+
+    private void loadBookCsvData() throws FileNotFoundException {
+        if (bookRepository.count() < 1) {
+            File file = ResourceUtils.getFile("classpath:csvdata/book-data.csv");
+            List<BookCsvRecord> recs = bookCsvService.convertCSV(file);
+
+            for (BookCsvRecord record : recs){
+                Book book = new Book();
+                book.setIsbn(record.getIsbn());
+                book.setTitle(record.getTitle());
+                book.setSubject(record.getSubject());
+                book.setLanguage(record.getLanguage());
+                book.setNumberOfPages(record.getNumberOfPages());
+
+                Publisher publisher = new Publisher();
+                publisher.setId(record.getPublisherId());
+
+                book.setPublisher(publisher);
+
+                bookRepository.save(book);
+            }
+        }
+    }
+
+    private void loadAuthorCsvData() throws FileNotFoundException {
+        if (authorRepository.count() < 1) {
+            File file = ResourceUtils.getFile("classpath:csvdata/author-data.csv");
+            List<AuthorCsvRecord> recs = authorCsvService.convertCSV(file);
+
+            for (AuthorCsvRecord record : recs) {
+                Author author = new Author();
+                author.setAuthorName(record.getAuthorName());
+                authorRepository.save(author);
+            }
+        }
+    }
+
+    private void loadPublisherCsvData() throws FileNotFoundException {
+
+        if (publisherRepository.count() < 1) {
+            File file = ResourceUtils.getFile("classpath:csvdata/publisher-data.csv");
+            List<PublisherCsvRecord> recs = publisherCsvService.convertCSV(file);
+
+            for (PublisherCsvRecord record : recs){
+                Publisher publisher = new Publisher();
+                publisher.setPublisherName(record.getPublisherName());
+                publisherRepository.save(publisher);
+            }
+
+        }
     }
 
 

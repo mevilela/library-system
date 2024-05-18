@@ -21,6 +21,7 @@ public class CardController {
     }
 
 
+    @GetMapping
     public List<CardDto> getAllCards(){
 
         List<CardDto> cardDtos = cardService.getAllCards();

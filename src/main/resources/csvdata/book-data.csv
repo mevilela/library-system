@@ -1,0 +1,21 @@
+"id","isbn","title","author_ids","publisher_id","subject","language","number_of_pages"
+"1","978-3-16-148410-0","Harry Potter and the Sorcerer's Stone","1","1","Fantasy","English",320
+"2","978-1-86197-876-9","A Game of Thrones","2","2","Fantasy","English",694
+"3","978-0-14-044913-6","The Hobbit","3","3","Fantasy","English",310
+"4","978-0-7432-7356-5","Murder on the Orient Express","4","4","Mystery","English",256
+"5","978-0-452-28423-4","The Shining","5","5","Horror","English",447
+"6","978-0-06-093546-7","Pride and Prejudice","6","6","Romance","English",279
+"7","978-0-312-42775-2","Adventures of Huckleberry Finn","7","7","Fiction","English",366
+"8","978-0-345-39180-3","A Tale of Two Cities","8","8","Historical Fiction","English",489
+"9","978-0-394-82302-6","The Old Man and the Sea","9","9","Fiction","English",132
+"10","978-0-525-47546-1","The Great Gatsby","10","10","Fiction","English",180
+"11","978-1-250-03002-1","Harry Potter and the Chamber of Secrets","1","6","Fantasy","English",341
+"12","978-0-06-093546-8","A Clash of Kings","2","2","Fantasy","English",768
+"13","978-0-452-28423-5","The Lord of the Rings: The Fellowship of the Ring","3","5","Fantasy","English",423
+"14","978-0-312-42775-3","And Then There Were None","4","2","Mystery","English",272
+"15","978-0-7432-7356-6","It","5","3","Horror","English",1138
+"16","978-0-394-82302-7","Emma","6","1","Romance","English",474
+"17","978-1-250-03002-2","The Adventures of Tom Sawyer","7","1","Fiction","English",274
+"18","978-0-345-39180-4","Great Expectations","8","4","Fiction","English",505
+"19","978-0-525-47546-2","For Whom the Bell Tolls","9","3","Fiction","English",480
+"20","978-0-7432-7356-7","Tender is the Night","10","9","Fiction","English",317

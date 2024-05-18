@@ -6,12 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import zely.project.librarysystem.repository.account.AccountRepository;
+import zely.project.librarysystem.repository.book.AuthorRepository;
+import zely.project.librarysystem.repository.book.BookItemRepository;
+import zely.project.librarysystem.repository.book.BookRepository;
+import zely.project.librarysystem.repository.book.PublisherRepository;
 import zely.project.librarysystem.repository.card.CardRepository;
 import zely.project.librarysystem.repository.library.LibraryCodeRepository;
 import zely.project.librarysystem.repository.library.LibraryRepository;
 import zely.project.librarysystem.repository.library.RackRepository;
 import zely.project.librarysystem.service.account.AccountCsvService;
 import zely.project.librarysystem.service.account.AccountCsvServiceImpl;
+import zely.project.librarysystem.service.book.csv.*;
 import zely.project.librarysystem.service.card.CardCsvService;
 import zely.project.librarysystem.service.card.CardCsvServiceImpl;
 import zely.project.librarysystem.service.library.LibraryCsvService;
@@ -22,7 +27,8 @@ import zely.project.librarysystem.service.library.RackCsvServiceImpl;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({LibraryCsvServiceImpl.class, AccountCsvServiceImpl.class, RackCsvServiceImpl.class, CardCsvServiceImpl.class})
+@Import({LibraryCsvServiceImpl.class, AccountCsvServiceImpl.class, RackCsvServiceImpl.class, CardCsvServiceImpl.class,
+        PublisherCsvServiceImpl.class, AuthorCsvServiceImpl.class, BookCsvServiceImpl.class, BookItemCsvServiceImpl.class})
 public class BootstrapDataTest {
     @Autowired
     LibraryRepository libraryRepository;
@@ -49,13 +55,38 @@ public class BootstrapDataTest {
     @Autowired
     LibraryCodeRepository libraryCodeRepository;
 
+    @Autowired
+    PublisherRepository publisherRepository;
+
+    @Autowired
+    PublisherCsvService publisherCsvService;
+
+    @Autowired
+    AuthorRepository authorRepository;
+
+    @Autowired
+    AuthorCsvService authorCsvService;
+
+    @Autowired
+    BookRepository bookRepository;
+
+    @Autowired
+    BookCsvService bookCsvService;
+
+    @Autowired
+    BookItemRepository bookItemRepository;
+
+    @Autowired
+    BookItemCsvService bookItemCsvService;
+
     BootstrapData bootstrapData;
 
     @BeforeEach
     void setUp() {
 
-         bootstrapData = new BootstrapData(libraryRepository, libraryCsvService, accountRepository,
-                accountCsvService, rackRepository, rackCsvService, cardRepository, cardCsvService, libraryCodeRepository);
+        bootstrapData = new BootstrapData(libraryRepository, libraryCsvService, accountRepository,
+                accountCsvService, rackRepository, rackCsvService, cardRepository, cardCsvService, libraryCodeRepository, publisherRepository,
+                publisherCsvService, authorRepository, authorCsvService, bookRepository, bookCsvService, bookItemRepository, bookItemCsvService);
     }
 
     @Test
@@ -66,6 +97,10 @@ public class BootstrapDataTest {
         assertThat(accountRepository.count()).isEqualTo(10);
         assertThat(rackRepository.count()).isEqualTo(10);
         assertThat(cardRepository.count()).isEqualTo(10);
+        assertThat(publisherRepository.count()).isEqualTo(10);
+        assertThat(authorRepository.count()).isEqualTo(10);
+        assertThat(bookRepository.count()).isEqualTo(20);
+        assertThat(bookItemRepository.count()).isEqualTo(40);
     }
 }
 
