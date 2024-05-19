@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -17,6 +19,16 @@ public class BookDto {
     private String isbn;
 
     private String title;
+
+    private String language;
+
+    private String subject;
+
+    private Integer numberOfPages;
+
+    private Set<AuthorDto> authors;
+
+    private PublisherDto publisher;
 }
 
 
