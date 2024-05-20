@@ -1,13 +1,11 @@
 package zely.project.librarysystem.service.library;
 
 import org.springframework.stereotype.Service;
-import zely.project.librarysystem.domain.library.LibraryCode;
 import zely.project.librarysystem.domain.library.Rack;
 import zely.project.librarysystem.dto.library.RackDto;
 import zely.project.librarysystem.mapper.RackMapper;
 import zely.project.librarysystem.repository.library.RackRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,19 +38,19 @@ public class RackServiceImpl implements RackService {
         return Optional.ofNullable(rackMapper.toRackDto(rackRepository.findById(id).orElse(null)));
     }
 
-    @Override
-    public List<RackDto> getRackByLibraryCode(LibraryCode libraryCode) {
-
-        List<Rack> racks = rackRepository.findRackByLibraryCode(libraryCode);
-        List<RackDto> rackDtos = new ArrayList<>();
-
-        for (Rack rack : racks){
-            rackDtos.add(rackMapper.toRackDto(rack));
-        }
-
-        return rackDtos;
-
-    }
+//    @Override
+//    public List<RackDto> getRackByLibraryCode(LibraryCode libraryCode) {
+//
+//        List<Rack> racks = rackRepository.findRackByLibraryCode(libraryCode);
+//        List<RackDto> rackDtos = new ArrayList<>();
+//
+//        for (Rack rack : racks){
+//            rackDtos.add(rackMapper.toRackDto(rack));
+//        }
+//
+//        return rackDtos;
+//
+//    }
 
     @Override
     public Optional<RackDto> getRackBySection(String section) {

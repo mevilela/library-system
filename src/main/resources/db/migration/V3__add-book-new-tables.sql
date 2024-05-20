@@ -30,23 +30,15 @@ CREATE TABLE `book`(
                        CONSTRAINT FOREIGN KEY (publisher_id) REFERENCES  publisher(id)
 ) ENGINE = InnoDB;
 
-CREATE TABLE `library_code`(
-    code_id INTEGER,
-    library_id INTEGER,
-    PRIMARY KEY (code_id),
-    CONSTRAINT FOREIGN KEY (library_id) REFERENCES  library(id)
-
-) ENGINE = InnoDB;
-
 
 CREATE TABLE `rack` (
                         id INTEGER AUTO_INCREMENT NOT NULL,
                         rack_number INTEGER UNIQUE NOT NULL,
                         location VARCHAR(56) NOT NULL,
                         section VARCHAR(56),
-                        library_code_id INTEGER,
+                        library_id INTEGER,
                         PRIMARY KEY (id),
-                        FOREIGN KEY (library_code_id) REFERENCES library_code(code_id)
+                        FOREIGN KEY (library_id) REFERENCES library(id)
 ) ENGINE = InnoDB;
 
 

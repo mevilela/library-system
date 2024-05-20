@@ -4,9 +4,7 @@ import org.springframework.stereotype.Service;
 import zely.project.librarysystem.domain.book.Author;
 import zely.project.librarysystem.domain.book.Book;
 import zely.project.librarysystem.domain.book.Publisher;
-import zely.project.librarysystem.dto.book.AuthorDto;
-import zely.project.librarysystem.dto.book.BookDto;
-import zely.project.librarysystem.dto.book.PublisherDto;
+import zely.project.librarysystem.dto.book.*;
 import zely.project.librarysystem.mapper.BookMapper;
 import zely.project.librarysystem.repository.book.BookRepository;
 
@@ -29,28 +27,33 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public List<BookDto> getAllBooks() {
+    public List<BookResponseDto> getAllBooks() {
 
         List<Book> bookList = bookRepository.findAll();
 
         return bookList.stream().map(
-                bookMapper::toBookDto).collect(Collectors.toList());
+                book -> {
+                    BookResponseDto bookDto = bookMapper.toBookResponseDto(book);
+                    bookDto.setAuthorNames(book.getAuthors().stream().map(Author::getAuthorName).collect(Collectors.toSet()));
+
+                    return bookDto;
+                }).collect(Collectors.toList());
 
     }
 
     @Override
-    public Optional<BookDto> getBookById(Integer id) {
+    public Optional<BookResponseDto> getBookById(Integer id) {
         return Optional.ofNullable(bookMapper.toBookDto(bookRepository.findById(id).orElse(null)));
 
     }
 
     @Override
-    public BookDto createNewBook(BookDto bookDto) {
+    public BookResponseDto createNewBook(BookDto bookDto) {
         return bookMapper.toBookDto(bookRepository.save(bookMapper.toBookEntity(bookDto)));
     }
 
     @Override
-    public Optional<BookDto> updateBookById(Integer id, BookDto bookDto) {
+    public Optional<BookResponseDto> updateBookById(Integer id, BookResponseDto bookDto) {
         return bookRepository.findById(id).map(
                 foundBook -> {
                     foundBook.setIsbn(bookDto.getIsbn());
@@ -58,47 +61,12 @@ public class BookServiceImpl implements BookService {
                     foundBook.setLanguage(bookDto.getLanguage());
                     foundBook.setSubject(bookDto.getSubject());
                     foundBook.setNumberOfPages(bookDto.getNumberOfPages());
-                    if (foundBook.getPublisher() != null){
-                        Publisher publisher = getPublisher(bookDto);
-                        foundBook.setPublisher(publisher);
-                    } else {
-                        throw new NullPointerException("Publisher cannot be null");
-                    }
-
-                    if (foundBook.getAuthors() != null){
-                        Set<Author> authors = getAuthors(bookDto);
-                        foundBook.setAuthors(authors);
-                    } else {
-                        throw new NullPointerException("Author cannot be null");
-                    }
 
                     return foundBook;
-                }).map(bookRepository::save).map(bookMapper::toBookDto);
+                }).map(bookRepository::save).map(bookMapper::toBookResponseDto);
     }
 
-    private Set<Author> getAuthors(BookDto bookDto){
 
-        Set<AuthorDto> authorDtos = bookDto.getAuthors();
-
-        Set<Author> authors = new HashSet<>();
-
-        for (AuthorDto authorDto : authorDtos) {
-            Author author = new Author();
-            author.setId(authorDto.getId());
-            authors.add(author);
-        }
-
-        return authors;
-    }
-
-    private Publisher getPublisher(BookDto bookDto){
-
-        PublisherDto publisherDto = bookDto.getPublisher();
-        Publisher publisher = new Publisher();
-        publisher.setId(publisherDto.getId());
-
-        return publisher;
-    }
 
     @Override
     public boolean deleteBookById(Integer id) {
@@ -107,6 +75,12 @@ public class BookServiceImpl implements BookService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Optional<BookResponseDto> getBookByIsbn(String isbn) {
+        return Optional.ofNullable(bookMapper.toBookDto((bookRepository.getBookByIsbn(isbn)).orElse(null)));
+
     }
 }
 

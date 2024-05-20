@@ -30,8 +30,8 @@ public class Rack {
     private String section;
 
     @ManyToOne
-    @JoinColumn(name = "library_code_id")
-    private LibraryCode libraryCode;
+    @JoinColumn(name = "library_id")
+    private Library library;
 
     @OneToMany(mappedBy = "rack")
     private Set<BookItem> bookItemSet = new HashSet<>();

@@ -13,8 +13,8 @@ public class RackCsvRecord {
     @CsvBindByName(column = "id")
     private Integer id;
 
-    @CsvBindByName(column = "library_code")
-    private Integer libraryCode;
+    @CsvBindByName(column = "library_id")
+    private Integer libraryId;
 
     @CsvBindByName(column = "rack_number")
     private Integer rackNumber;

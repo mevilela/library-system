@@ -11,11 +11,10 @@ import zely.project.librarysystem.repository.book.BookItemRepository;
 import zely.project.librarysystem.repository.book.BookRepository;
 import zely.project.librarysystem.repository.book.PublisherRepository;
 import zely.project.librarysystem.repository.card.CardRepository;
-import zely.project.librarysystem.repository.library.LibraryCodeRepository;
 import zely.project.librarysystem.repository.library.LibraryRepository;
 import zely.project.librarysystem.repository.library.RackRepository;
-import zely.project.librarysystem.service.account.AccountCsvService;
-import zely.project.librarysystem.service.account.AccountCsvServiceImpl;
+import zely.project.librarysystem.service.account.csv.AccountCsvService;
+import zely.project.librarysystem.service.account.csv.AccountCsvServiceImpl;
 import zely.project.librarysystem.service.book.csv.*;
 import zely.project.librarysystem.service.card.CardCsvService;
 import zely.project.librarysystem.service.card.CardCsvServiceImpl;
@@ -53,9 +52,6 @@ public class BootstrapDataTest {
     CardCsvService cardCsvService;
 
     @Autowired
-    LibraryCodeRepository libraryCodeRepository;
-
-    @Autowired
     PublisherRepository publisherRepository;
 
     @Autowired
@@ -85,7 +81,7 @@ public class BootstrapDataTest {
     void setUp() {
 
         bootstrapData = new BootstrapData(libraryRepository, libraryCsvService, accountRepository,
-                accountCsvService, rackRepository, rackCsvService, cardRepository, cardCsvService, libraryCodeRepository, publisherRepository,
+                accountCsvService, rackRepository, rackCsvService, cardRepository, cardCsvService, publisherRepository,
                 publisherCsvService, authorRepository, authorCsvService, bookRepository, bookCsvService, bookItemRepository, bookItemCsvService);
     }
 

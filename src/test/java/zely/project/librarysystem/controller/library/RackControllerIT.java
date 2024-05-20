@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.webjars.NotFoundException;
-import zely.project.librarysystem.domain.library.LibraryCode;
 import zely.project.librarysystem.domain.library.Rack;
 import zely.project.librarysystem.dto.library.LibraryDto;
 import zely.project.librarysystem.dto.library.RackDto;
@@ -75,7 +74,7 @@ class RackControllerIT {
         rackDto.setRackNumber(1234);
         rackDto.setSection("2nd floor");
         rackDto.setSection("romance");
-        rackDto.setLibraryDto(new LibraryDto());
+        rackDto.setLibrary(new LibraryDto());
 
         ResponseEntity responseEntity = rackController.createNewRack(rackDto);
 
@@ -88,30 +87,6 @@ class RackControllerIT {
     }
 
 
-
-    @Transactional
-    @Rollback
-    @Test
-    void testRackLibraryCodeIsNotFound() {
-
-        LibraryCode libraryCode = new LibraryCode();
-        libraryCode.setCodeId(9999);
-
-        assertThrows(NotFoundException.class, () -> {
-            rackController.getRacksByLibraryCode(libraryCode);
-        });
-
-    }
-    @Transactional
-    @Rollback
-    @Test
-    void testRackLibraryCodeIsNull() {
-
-        assertThrows(NotFoundException.class, () -> {
-            rackController.getRacksByLibraryCode(null);
-        });
-
-    }
 
 
     @Transactional

@@ -19,6 +19,6 @@ public class RackDto {
 
     private String section;
 
-    private LibraryDto libraryDto;
+    private LibraryDto library;
 
 }

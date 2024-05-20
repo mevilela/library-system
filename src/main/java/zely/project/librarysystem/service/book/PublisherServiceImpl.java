@@ -1,5 +1,6 @@
 package zely.project.librarysystem.service.book;
 
+import org.springframework.stereotype.Service;
 import zely.project.librarysystem.domain.book.Publisher;
 import zely.project.librarysystem.dto.book.PublisherDto;
 import zely.project.librarysystem.mapper.PublisherMapper;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
 public class PublisherServiceImpl implements PublisherService {
 
     private final PublisherRepository publisherRepository;

@@ -18,7 +18,6 @@ import java.util.Set;
 public class Library {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
@@ -26,10 +25,10 @@ public class Library {
     private String address;
 
     @OneToMany(mappedBy = "library", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private Set<Card> cards = new HashSet<>();;
+    private Set<Rack> racks = new HashSet<>();
 
-    @OneToOne(mappedBy = "library")
-    private LibraryCode libraryCode;
+    @OneToMany(mappedBy = "library", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private Set<Card> cards = new HashSet<>();;
 
 }
 

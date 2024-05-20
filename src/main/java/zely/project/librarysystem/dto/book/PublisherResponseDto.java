@@ -5,27 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Getter
-public class AuthorDto {
+@Setter
+public class PublisherResponseDto {
 
-    private Integer id;
-
-    private String name;
-
-    public Set<BookDto> books;
-
-
+    private String publisherName;
 
 }
-
-
-
-
-
-
-

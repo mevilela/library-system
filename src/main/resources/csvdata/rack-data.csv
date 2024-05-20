@@ -1,4 +1,4 @@
-library_code,rack_number,location,section
+library_id,rack_number,location,section
 1001,101,"Main Section","Fiction"
 1001,102,"Second Floor","Non-Fiction"
 1002,103,"Children's Section","Children's Books"

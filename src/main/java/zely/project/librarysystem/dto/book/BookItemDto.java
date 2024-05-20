@@ -21,7 +21,7 @@ public class BookItemDto {
 
     private String bookBarcode;
 
-    private BookDto bookDto;
+    private BookDto book;
 
     private double price;
 

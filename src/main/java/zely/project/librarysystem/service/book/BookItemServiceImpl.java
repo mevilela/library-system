@@ -1,5 +1,6 @@
 package zely.project.librarysystem.service.book;
 
+import org.springframework.stereotype.Service;
 import zely.project.librarysystem.domain.book.Book;
 import zely.project.librarysystem.domain.book.BookItem;
 import zely.project.librarysystem.domain.library.Rack;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Service
 public class BookItemServiceImpl implements BookItemService {
 
     private final BookItemRepository bookItemRepository;
@@ -41,7 +43,7 @@ public class BookItemServiceImpl implements BookItemService {
     }
 
     @Override
-    public Optional<BookItemDto> getBookItemByBookItemBarCode(String bookBarcode) {
+    public Optional<BookItemDto> getBookItemByBookItemByBarCode(String bookBarcode) {
 
         return Optional.ofNullable(bookItemMapper.toBookItemDto((bookItemRepository.getBookItemByBookBarcode(bookBarcode)).orElse(null)));
 
@@ -66,7 +68,7 @@ public class BookItemServiceImpl implements BookItemService {
                     foundBookItem.setPublicationDate(bookItemDto.getPublicationDate());
                     foundBookItem.setStatus(bookItemDto.getBookStatus());
 
-                    if (bookItemDto.getBookDto() != null){
+                    if (bookItemDto.getBook() != null){
                         Book book = getBook(bookItemDto);
                         foundBookItem.setBook(book);
                     } else {
@@ -95,7 +97,7 @@ public class BookItemServiceImpl implements BookItemService {
     }
 
     private static Book getBook(BookItemDto bookItemDto){
-        BookDto bookDto = bookItemDto.getBookDto();
+        BookDto bookDto = bookItemDto.getBook();
 
         Book book = new Book();
         book.setId(bookItemDto.getId());

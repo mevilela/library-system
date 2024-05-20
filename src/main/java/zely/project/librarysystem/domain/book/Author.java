@@ -1,5 +1,6 @@
 package zely.project.librarysystem.domain.book;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,13 +22,9 @@ public class Author {
     @Column(name = "author_name", nullable = false)
     private String authorName;
 
+    
     @Builder.Default
-    @ManyToMany
-    @JoinTable(
-            name = "author_book",
-            joinColumns = @JoinColumn(name = "author_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id")
-    )
+    @ManyToMany(mappedBy = "authors")
     private Set<Book> books = new HashSet<>();
 
 

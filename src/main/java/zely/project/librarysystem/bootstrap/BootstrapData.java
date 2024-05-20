@@ -11,7 +11,6 @@ import zely.project.librarysystem.domain.account.*;
 import zely.project.librarysystem.domain.book.*;
 import zely.project.librarysystem.domain.card.Card;
 import zely.project.librarysystem.domain.library.Library;
-import zely.project.librarysystem.domain.library.LibraryCode;
 import zely.project.librarysystem.domain.library.Rack;
 import zely.project.librarysystem.repository.account.AccountRepository;
 import zely.project.librarysystem.repository.book.AuthorRepository;
@@ -19,10 +18,9 @@ import zely.project.librarysystem.repository.book.BookItemRepository;
 import zely.project.librarysystem.repository.book.BookRepository;
 import zely.project.librarysystem.repository.book.PublisherRepository;
 import zely.project.librarysystem.repository.card.CardRepository;
-import zely.project.librarysystem.repository.library.LibraryCodeRepository;
 import zely.project.librarysystem.repository.library.LibraryRepository;
 import zely.project.librarysystem.repository.library.RackRepository;
-import zely.project.librarysystem.service.account.AccountCsvService;
+import zely.project.librarysystem.service.account.csv.AccountCsvService;
 import zely.project.librarysystem.service.book.csv.AuthorCsvService;
 import zely.project.librarysystem.service.book.csv.BookCsvService;
 import zely.project.librarysystem.service.book.csv.BookItemCsvService;
@@ -31,12 +29,13 @@ import zely.project.librarysystem.service.card.CardCsvService;
 import zely.project.librarysystem.service.library.LibraryCsvService;
 import zely.project.librarysystem.service.library.RackCsvService;
 
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 import static zely.project.librarysystem.domain.account.AccountType.LIBRARIAN;
 import static zely.project.librarysystem.domain.account.AccountType.MEMBER;
@@ -54,7 +53,7 @@ public class BootstrapData implements CommandLineRunner {
     private final RackCsvService rackCsvService;
     private final CardRepository cardRepository;
     private final CardCsvService cardCsvService;
-    private final LibraryCodeRepository libraryCodeRepository;
+//    private final LibraryCodeRepository libraryCodeRepository;
     private final PublisherRepository publisherRepository;
     private final PublisherCsvService publisherCsvService;
     private final AuthorRepository authorRepository;
@@ -123,6 +122,15 @@ public class BootstrapData implements CommandLineRunner {
                 book.setLanguage(record.getLanguage());
                 book.setNumberOfPages(record.getNumberOfPages());
 
+                List<String> authorIds = Arrays.stream(record.getAuthorIds().split(",")).toList();
+
+                Set<Author> authorList = new HashSet<>();
+                for(String authorId : authorIds){
+                    authorList.add(authorRepository.findById(Integer.parseInt(authorId)).orElseThrow());
+                }
+
+                book.setAuthors(authorList);
+
                 Publisher publisher = new Publisher();
                 publisher.setId(record.getPublisherId());
 
@@ -169,8 +177,10 @@ public class BootstrapData implements CommandLineRunner {
 
             for (LibraryCSVRecord record : recs){
                 Library library = new Library();
+                library.setId(record.getId());
                 library.setName(record.getName());
                 library.setAddress(record.getAddress());
+
                 libraryRepository.save(library);
 
             }
@@ -297,19 +307,7 @@ public class BootstrapData implements CommandLineRunner {
                 rack.setRackNumber(record.getRackNumber());
                 rack.setLocation(record.getLocation());
                 rack.setSection(record.getSection());
-
-                LibraryCode libraryCode = new LibraryCode();
-                libraryCode.setCodeId(record.getLibraryCode());
-
-                libraryCodeRepository.save(libraryCode);
-
-                Optional<LibraryCode> libraryCodeOptional = libraryCodeRepository.findById(libraryCode.getCodeId());
-                if (libraryCodeOptional.isPresent()) {
-                    rack.setLibraryCode(libraryCodeOptional.get());
-                    rackRepository.save(rack);
-                } else {
-                    throw new NotFoundException("Library not found for rack with code: " + record.getLibraryCode());
-                }
+                rack.setLibrary(libraryRepository.findById(record.getLibraryId()).orElseThrow());
 
                 rackRepository.save(rack);
             }
@@ -329,11 +327,7 @@ public class BootstrapData implements CommandLineRunner {
                 card.setBarcode(cardRecords.getBarcode());
                 card.setActive(cardRecords.isActive());
                 card.setIssuedAt(cardRecords.getIssuedAt());
-
-                Library library = new Library();
-                library.setId(cardRecords.getId());
-
-                card.setLibrary(library);
+                card.setLibrary(libraryRepository.findById(cardRecords.getLibraryId()).orElseThrow());
 
                 Account account = accountRepository.findById(cardRecords.getAccountId())
                         .orElseThrow(() -> new NotFoundException("Account not found"));

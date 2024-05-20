@@ -28,7 +28,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public AccountDto getAccountById(Integer id){
+    public AccountDto getAccountById(@PathVariable Integer id){
         return accountService.getAccountById(id).orElseThrow(() -> new NotFoundException("id not found"));
     }
 

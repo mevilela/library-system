@@ -26,8 +26,8 @@ public class BookCsvRecord {
     @CsvBindByName(column = "title")
     private String title;
 
-    @CsvBindByName(column = "author_id")
-    private Integer authorId;
+    @CsvBindByName(column = "author_ids")
+    private String authorIds;
 
     @CsvBindByName(column = "publisher_id")
     private Integer publisherId;

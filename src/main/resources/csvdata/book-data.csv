@@ -1,5 +1,5 @@
 "id","isbn","title","author_ids","publisher_id","subject","language","number_of_pages"
-"1","978-3-16-148410-0","Harry Potter and the Sorcerer's Stone","1","1","Fantasy","English",320
+"1","978-3-16-148410-0","Harry Potter and the Sorcerer's Stone","1,2","1","Fantasy","English",320
 "2","978-1-86197-876-9","A Game of Thrones","2","2","Fantasy","English",694
 "3","978-0-14-044913-6","The Hobbit","3","3","Fantasy","English",310
 "4","978-0-7432-7356-5","Murder on the Orient Express","4","4","Mystery","English",256

@@ -2,7 +2,6 @@ package zely.project.librarysystem.service.book;
 
 
 import org.springframework.stereotype.Service;
-import zely.project.librarysystem.domain.book.BookItem;
 import zely.project.librarysystem.dto.book.BookItemDto;
 
 import java.util.List;
@@ -15,7 +14,7 @@ public interface BookItemService {
 
     Optional<BookItemDto> getBookItemById(Integer id);
 
-    Optional<BookItemDto> getBookItemByBookItemBarCode(String bookBarcode);
+    Optional<BookItemDto> getBookItemByBookItemByBarCode(String bookBarcode);
 
     BookItemDto createNewBookItem(BookItemDto bookItemDto);
 
