@@ -42,6 +42,11 @@ public class CardServiceImpl implements CardService {
     }
 
     @Override
+    public Optional<CardDto> getCardByBarcode(String cardBarcode) {
+        return Optional.ofNullable(cardMapper.toCardDto(cardRepository.getCardByBarcode(cardBarcode).orElse(null)));
+    }
+
+    @Override
     public List<CardDto> getCardByLibrary(Integer id) {
 
         List<Card> cards = cardRepository.findCardByLibrary_Id(id);

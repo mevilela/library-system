@@ -8,9 +8,6 @@ import lombok.Setter;
 import zely.project.librarysystem.config.CustomDoubleSerializer;
 import zely.project.librarysystem.domain.book.BookStatus;
 import zely.project.librarysystem.domain.book.Format;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import zely.project.librarysystem.dto.library.RackDto;
 
 import java.time.LocalDate;
 
@@ -19,26 +16,22 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @NoArgsConstructor
-public class BookItemDto {
-
-    private Integer id;
+public class BookItemSummaryDto {
 
     private String bookBarcode;
 
-    private BookDto book;
+    private BookSummaryDto book;
 
     @JsonSerialize(using = CustomDoubleSerializer.class)
     private double price;
 
     private Format format;
 
-    private RackDto rack;
+    private Integer rack;
+
+    private String library;
 
     private BookStatus bookStatus;
-
-    private LocalDate borrowDate;
-
-    private LocalDate dueDate;
 
     private LocalDate dateOfPurchase;
 

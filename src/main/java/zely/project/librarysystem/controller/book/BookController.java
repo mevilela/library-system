@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.dto.book.BookCreateDto;
 import zely.project.librarysystem.dto.book.BookDto;
-import zely.project.librarysystem.dto.book.BookResponseDto;
 import zely.project.librarysystem.service.book.BookService;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class BookController {
     }
 
     @GetMapping
-    public List<BookResponseDto> getAllBooks(){
+    public List<BookDto> getAllBooks(){
         return bookService.getAllBooks();
     }
 
@@ -37,14 +37,14 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BookDto> createNewBook(@RequestBody BookDto bookDto){
+    public ResponseEntity<BookCreateDto> createNewBook(@RequestBody BookCreateDto bookCreateDto){
 
-        BookDto savedBook = bookService.createNewBook(bookDto);
+        BookCreateDto savedBook = bookService.createNewBook(bookCreateDto);
 
         return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ResponseEntity updateBookById(@PathVariable Integer id, @RequestBody BookDto bookDto){
         bookService.updateBookById(id, bookDto).orElseThrow(() -> new NotFoundException("book not found"));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

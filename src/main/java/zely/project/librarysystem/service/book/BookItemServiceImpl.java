@@ -3,9 +3,11 @@ package zely.project.librarysystem.service.book;
 import org.springframework.stereotype.Service;
 import zely.project.librarysystem.domain.book.Book;
 import zely.project.librarysystem.domain.book.BookItem;
+import zely.project.librarysystem.domain.book.BookStatus;
 import zely.project.librarysystem.domain.library.Rack;
 import zely.project.librarysystem.dto.book.BookDto;
 import zely.project.librarysystem.dto.book.BookItemDto;
+import zely.project.librarysystem.dto.book.BookItemSummaryDto;
 import zely.project.librarysystem.dto.library.RackDto;
 import zely.project.librarysystem.mapper.BookItemMapper;
 import zely.project.librarysystem.repository.book.BookItemRepository;
@@ -26,26 +28,25 @@ public class BookItemServiceImpl implements BookItemService {
     }
 
     @Override
-    public List<BookItemDto> getAllBookItems() {
+    public List<BookItemSummaryDto> getAllBookItems() {
 
        List<BookItem> bookItems = bookItemRepository.findAll();
 
        return bookItems.stream().map(
-               bookItemMapper::toBookItemDto
+               bookItemMapper::toBookItemSummaryDto
        ).collect(Collectors.toList());
 
     }
 
     @Override
-    public Optional<BookItemDto> getBookItemById(Integer id) {
-        return Optional.ofNullable(bookItemMapper.toBookItemDto((bookItemRepository.findById(id)).orElse(null)));
+    public Optional<BookItemSummaryDto> getBookItemById(Integer id) {
+        return Optional.ofNullable(bookItemMapper.toBookItemSummaryDto((bookItemRepository.findById(id)).orElse(null)));
 
     }
 
     @Override
-    public Optional<BookItemDto> getBookItemByBookItemByBarCode(String bookBarcode) {
-
-        return Optional.ofNullable(bookItemMapper.toBookItemDto((bookItemRepository.getBookItemByBookBarcode(bookBarcode)).orElse(null)));
+    public Optional<BookItemSummaryDto> getBookItemByBookItemByBarCode(String bookBarcode) {
+        return Optional.ofNullable(bookItemMapper.toBookItemSummaryDto((bookItemRepository.getBookItemByBookBarcode(bookBarcode)).orElse(null)));
 
     }
 
@@ -85,6 +86,16 @@ public class BookItemServiceImpl implements BookItemService {
                     return foundBookItem;
 
                 }).map(bookItemRepository::save).map(bookItemMapper::toBookItemDto);
+    }
+
+    @Override
+    public BookItemSummaryDto updateBookItemStatus(BookItemSummaryDto bookItemSummaryDto, BookStatus bookStatus) {
+
+        bookItemSummaryDto.setBookStatus(bookStatus);
+
+        bookItemRepository.save(bookItemMapper.toBookItemFromSummaryDto(bookItemSummaryDto));
+
+        return bookItemSummaryDto;
     }
 
     private static Rack getRack(BookItemDto bookItemDto){

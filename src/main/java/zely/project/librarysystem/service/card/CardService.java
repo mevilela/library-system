@@ -12,6 +12,7 @@ public interface CardService {
     List<CardDto> getAllCards();
 
     Optional<CardDto> getCardById(Integer id);
+    Optional<CardDto> getCardByBarcode(String cardBarcode);
 
     List<CardDto> getCardByLibrary(Integer id);
 

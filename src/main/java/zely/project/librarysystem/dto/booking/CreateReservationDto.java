@@ -1,6 +1,5 @@
 package zely.project.librarysystem.dto.booking;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,23 +9,18 @@ import zely.project.librarysystem.dto.card.CardDto;
 
 import java.time.LocalDate;
 
-
-
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-public class LendingDto {
+public class CreateReservationDto {
 
-    private LocalDate startDate;
+//    private LocalDate localDate;
+//
+//    private boolean active;
 
-    private LocalDate returnDate;
+    private String bookItemBarcode;
 
-    private boolean active;
-
-    private BookItemDto bookItem;
-
-    private CardDto libraryCard;
+    private String libraryCardBarcode;
 
 }
-

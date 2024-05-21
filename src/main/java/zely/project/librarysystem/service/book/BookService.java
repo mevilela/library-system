@@ -1,8 +1,8 @@
 package zely.project.librarysystem.service.book;
 
 import org.springframework.stereotype.Service;
+import zely.project.librarysystem.dto.book.BookCreateDto;
 import zely.project.librarysystem.dto.book.BookDto;
-import zely.project.librarysystem.dto.book.BookResponseDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,15 +10,15 @@ import java.util.Optional;
 @Service
 public interface BookService {
 
-    List<BookResponseDto> getAllBooks();
+    List<BookDto> getAllBooks();
 
-    Optional<BookResponseDto> getBookById(Integer id);
+    Optional<BookDto> getBookById(Integer id);
 
-    BookResponseDto createNewBook(BookResponseDto bookDto);
-
-    Optional<BookResponseDto> updateBookById(Integer id, BookResponseDto bookDto);
+    Optional<BookDto> updateBookById(Integer id, BookDto bookDto);
 
     boolean deleteBookById(Integer id);
 
-    Optional<BookResponseDto> getBookByIsbn(String isbn);
+    Optional<BookDto> getBookByIsbn(String isbn);
+
+    BookCreateDto createNewBook(BookCreateDto bookCreateDto);
 }

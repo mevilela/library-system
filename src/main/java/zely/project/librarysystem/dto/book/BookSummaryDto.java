@@ -1,22 +1,18 @@
 package zely.project.librarysystem.dto.book;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import zely.project.librarysystem.domain.book.Publisher;
 
 import java.util.Set;
+
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookDto {
-
-    private Integer id;
-
+public class BookSummaryDto {
     private String isbn;
 
     private String title;
@@ -31,5 +27,4 @@ public class BookDto {
 
     private String publisherName;
 }
-
 

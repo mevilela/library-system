@@ -1,7 +1,10 @@
 package zely.project.librarysystem.domain.book;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
+import zely.project.librarysystem.config.CustomDoubleSerializer;
 import zely.project.librarysystem.domain.booking.Lending;
 import zely.project.librarysystem.domain.booking.Reservation;
 import zely.project.librarysystem.domain.library.Rack;
@@ -29,6 +32,7 @@ public class BookItem {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
+    @JsonSerialize(using = CustomDoubleSerializer.class)
     private double price;
 
     @Enumerated(EnumType.STRING)

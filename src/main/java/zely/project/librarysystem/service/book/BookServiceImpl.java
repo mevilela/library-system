@@ -1,18 +1,13 @@
 package zely.project.librarysystem.service.book;
 
 import org.springframework.stereotype.Service;
-import zely.project.librarysystem.domain.book.Author;
 import zely.project.librarysystem.domain.book.Book;
-import zely.project.librarysystem.domain.book.Publisher;
 import zely.project.librarysystem.dto.book.*;
 import zely.project.librarysystem.mapper.BookMapper;
 import zely.project.librarysystem.repository.book.BookRepository;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -27,33 +22,30 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public List<BookResponseDto> getAllBooks() {
+    public List<BookDto> getAllBooks() {
 
         List<Book> bookList = bookRepository.findAll();
-
-        return bookList.stream().map(
-                book -> {
-                    BookResponseDto bookDto = bookMapper.toBookResponseDto(book);
-                    bookDto.setAuthorNames(book.getAuthors().stream().map(Author::getAuthorName).collect(Collectors.toSet()));
-
-                    return bookDto;
-                }).collect(Collectors.toList());
+        return bookMapper.toBookDtoList(bookList);
 
     }
 
     @Override
-    public Optional<BookResponseDto> getBookById(Integer id) {
-        return Optional.ofNullable(bookMapper.toBookDto(bookRepository.findById(id).orElse(null)));
+    public Optional<BookDto> getBookById(Integer id) {
+        return bookRepository.findById(id)
+                .map(bookMapper::toBookDto);
 
     }
 
     @Override
-    public BookResponseDto createNewBook(BookDto bookDto) {
-        return bookMapper.toBookDto(bookRepository.save(bookMapper.toBookEntity(bookDto)));
+    public BookCreateDto createNewBook(BookCreateDto bookCreateDto) {
+
+        return bookMapper.toCreateFromBook(bookRepository.save(bookMapper.toBookFromCreate(bookCreateDto)));
+
     }
 
+
     @Override
-    public Optional<BookResponseDto> updateBookById(Integer id, BookResponseDto bookDto) {
+    public Optional<BookDto> updateBookById(Integer id, BookDto bookDto) {
         return bookRepository.findById(id).map(
                 foundBook -> {
                     foundBook.setIsbn(bookDto.getIsbn());
@@ -63,7 +55,7 @@ public class BookServiceImpl implements BookService {
                     foundBook.setNumberOfPages(bookDto.getNumberOfPages());
 
                     return foundBook;
-                }).map(bookRepository::save).map(bookMapper::toBookResponseDto);
+                }).map(bookRepository::save).map(bookMapper::toBookDto);
     }
 
 
@@ -78,9 +70,11 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Optional<BookResponseDto> getBookByIsbn(String isbn) {
+    public Optional<BookDto> getBookByIsbn(String isbn) {
         return Optional.ofNullable(bookMapper.toBookDto((bookRepository.getBookByIsbn(isbn)).orElse(null)));
 
     }
+
+
 }
 

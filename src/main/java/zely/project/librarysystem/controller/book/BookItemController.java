@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
 import zely.project.librarysystem.dto.book.BookItemDto;
+import zely.project.librarysystem.dto.book.BookItemSummaryDto;
 import zely.project.librarysystem.service.book.BookItemService;
 
 import java.util.List;
@@ -22,17 +23,17 @@ public class BookItemController {
 
 
     @GetMapping
-    public List<BookItemDto> getAllBookItems(){
+    public List<BookItemSummaryDto> getAllBookItems(){
         return bookItemService.getAllBookItems();
     }
 
     @GetMapping("/id/{id}")
-    public BookItemDto getBookItemById(@PathVariable Integer id){
+    public BookItemSummaryDto getBookItemById(@PathVariable Integer id){
         return bookItemService.getBookItemById(id).orElseThrow(() -> new NotFoundException("id not found"));
     }
 
     @GetMapping("/barcode/{bookBarcode}")
-    public BookItemDto getBookItemByBookBarcode(@PathVariable String bookBarcode){
+    public BookItemSummaryDto getBookItemByBookBarcode(@PathVariable String bookBarcode){
         return bookItemService.getBookItemByBookItemByBarCode(bookBarcode).orElseThrow(() -> new NotFoundException("id not found"));
     }
 

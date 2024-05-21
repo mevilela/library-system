@@ -5,17 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
-
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookResponseDto {
+public class BookCreateDto {
 
     private String isbn;
+
+    private Set<Integer> authorIdSet;
+
+    private Integer publisherId;
 
     private String title;
 
@@ -25,7 +27,5 @@ public class BookResponseDto {
 
     private Integer numberOfPages;
 
-    private Set<String> authorNames;
-
-    private PublisherResponseDto publisher;
 }
+

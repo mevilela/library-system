@@ -37,6 +37,11 @@ public class CardController {
         );
     }
 
+    @GetMapping("/barcode/{cardBarcode}")
+    public CardDto getCardByBarcode(@PathVariable String cardBarcode){
+        return cardService.getCardByBarcode(cardBarcode).orElseThrow(() -> new NotFoundException("id not found"));
+    }
+
 
 
     @PostMapping
