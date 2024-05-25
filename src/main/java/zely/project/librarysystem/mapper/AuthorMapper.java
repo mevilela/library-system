@@ -19,4 +19,6 @@ public interface AuthorMapper {
     @Mapping(target = "name", source = "author.authorName")
     AuthorResponseDto toAuthorResponseDto(Author author);
 
+
+
 }

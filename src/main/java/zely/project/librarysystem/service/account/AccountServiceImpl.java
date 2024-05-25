@@ -3,7 +3,9 @@ package zely.project.librarysystem.service.account;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import zely.project.librarysystem.domain.account.Account;
+import zely.project.librarysystem.domain.account.AccountStatus;
 import zely.project.librarysystem.domain.account.AccountType;
+import zely.project.librarysystem.dto.account.AccountCreateRequestDto;
 import zely.project.librarysystem.dto.account.AccountDto;
 import zely.project.librarysystem.mapper.AccountMapper;
 import zely.project.librarysystem.mapper.PersonMapper;
@@ -77,9 +79,21 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDto createNewAccount(AccountDto accountDto) {
+    public AccountCreateRequestDto createNewAccount(AccountCreateRequestDto accountCreateRequestDto) {
 
-        return accountMapper.toAccountDto(accountRepository.save((accountMapper.toAccountEntity(accountDto))));
+        Account account = accountMapper.accountFromCreateDto(accountCreateRequestDto);
+
+        String accountStatus = accountCreateRequestDto.getAccountStatus().toString();
+
+
+        account.setPassword(accountCreateRequestDto.getPassword());
+        account.setPerson(personMapper.toPersonEntity(accountCreateRequestDto.getPerson()));
+        account.setAccountStatus(AccountStatus.valueOf(accountStatus));
+
+
+        return accountMapper.toAccountCreateDto(accountRepository.save(account));
+
+
     }
 
     @Override

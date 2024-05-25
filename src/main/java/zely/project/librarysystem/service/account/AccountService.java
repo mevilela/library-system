@@ -4,6 +4,7 @@ package zely.project.librarysystem.service.account;
 import org.springframework.stereotype.Service;
 import zely.project.librarysystem.domain.account.Account;
 import zely.project.librarysystem.domain.account.AccountType;
+import zely.project.librarysystem.dto.account.AccountCreateRequestDto;
 import zely.project.librarysystem.dto.account.AccountDto;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface AccountService {
 
     Optional<AccountDto> getAccountById(Integer id);
 
-    AccountDto createNewAccount(AccountDto accountDto);
+    AccountCreateRequestDto createNewAccount(AccountCreateRequestDto accountCreateRequestDto);
 
     Optional<AccountDto> updateAccountById(Integer id, AccountDto accountDto);
 

@@ -16,6 +16,7 @@ import org.webjars.NotFoundException;
 import zely.project.librarysystem.domain.account.Account;
 import zely.project.librarysystem.domain.account.AccountStatus;
 import zely.project.librarysystem.domain.account.AccountType;
+import zely.project.librarysystem.dto.account.AccountCreateRequestDto;
 import zely.project.librarysystem.dto.account.AccountDto;
 import zely.project.librarysystem.dto.account.PersonDto;
 import zely.project.librarysystem.mapper.AccountMapper;
@@ -123,7 +124,7 @@ class AccountControllerIT {
         joao.setEmail("joao@gmail.com");
         joao.setPhone("222111333");
 
-        AccountDto accountDto = new AccountDto();
+        AccountCreateRequestDto accountDto = new AccountCreateRequestDto();
         accountDto.setAccountStatus(AccountStatus.ACTIVE);
         accountDto.setAccountType(AccountType.LIBRARIAN);
         accountDto.setPerson(joao);

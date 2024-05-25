@@ -1,8 +1,7 @@
 package zely.project.librarysystem.service.booking;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import zely.project.librarysystem.dto.booking.CreateReservationDto;
+import zely.project.librarysystem.dto.booking.BarcodeReaderDto;
 import zely.project.librarysystem.dto.booking.ReservationDto;
 import zely.project.librarysystem.manager.ReservationManager;
 
@@ -15,9 +14,9 @@ public class ReservationServiceImpl implements ReservationService {
         this.reservationManager = reservationManager;
     }
     @Override
-    public ReservationDto createReservation(CreateReservationDto createReservationDto) {
+    public ReservationDto createReservation(BarcodeReaderDto barcodeReaderDto) {
 
-        return reservationManager.createReservation(createReservationDto);
+        return reservationManager.createReservation(barcodeReaderDto);
 
     }
 }

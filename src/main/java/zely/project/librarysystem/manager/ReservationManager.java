@@ -3,15 +3,16 @@ package zely.project.librarysystem.manager;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.domain.book.BookItem;
 import zely.project.librarysystem.domain.book.BookStatus;
-import zely.project.librarysystem.dto.book.BookItemSummaryDto;
-import zely.project.librarysystem.dto.booking.CreateReservationDto;
+import zely.project.librarysystem.domain.booking.Reservation;
+import zely.project.librarysystem.domain.card.Card;
+import zely.project.librarysystem.dto.booking.BarcodeReaderDto;
 import zely.project.librarysystem.dto.booking.ReservationDto;
-import zely.project.librarysystem.dto.card.CardDto;
 import zely.project.librarysystem.mapper.ReservationMapper;
+import zely.project.librarysystem.repository.book.BookItemRepository;
 import zely.project.librarysystem.repository.booking.ReservationRepository;
-import zely.project.librarysystem.service.book.BookItemService;
-import zely.project.librarysystem.service.card.CardService;
+import zely.project.librarysystem.repository.card.CardRepository;
 
 import java.time.LocalDate;
 
@@ -19,45 +20,47 @@ import java.time.LocalDate;
 public class ReservationManager {
     private final ReservationMapper reservationMapper;
     private final ReservationRepository reservationRepository;
-    private final CardService cardService;
-    private final BookItemService bookItemService;
+    private final BookItemRepository bookItemRepository;
+    private final CardRepository cardRepository;
 
-
-    public ReservationManager(ReservationMapper reservationMapper, ReservationRepository reservationRepository, CardService cardService, BookItemService bookItemService) {
+    public ReservationManager(ReservationMapper reservationMapper, ReservationRepository reservationRepository, BookItemRepository bookItemRepository, CardRepository cardRepository) {
         this.reservationMapper = reservationMapper;
         this.reservationRepository = reservationRepository;
-        this.cardService = cardService;
-        this.bookItemService = bookItemService;
+        this.bookItemRepository = bookItemRepository;
+        this.cardRepository = cardRepository;
     }
     @Transactional
-    public ReservationDto createReservation(CreateReservationDto createReservationDto) {
+    public ReservationDto createReservation(BarcodeReaderDto barcodeReaderDto) {
 
         //find bookItem
-        BookItemSummaryDto bookItemSummaryDto = bookItemService.getBookItemByBookItemByBarCode(createReservationDto.getBookItemBarcode())
+        BookItem bookItem = bookItemRepository.getBookItemByBookBarcode(barcodeReaderDto.getBookItemBarcode())
                 .orElseThrow(() -> new NotFoundException("BookItem not found"));
 
-        if (bookItemSummaryDto.getBookStatus() == BookStatus.LOST) {
+        if (bookItem.getStatus() == BookStatus.LOST) {
             throw new IllegalStateException("This book is lost");
         }
 
         //find card
-        CardDto cardDto = cardService.getCardByBarcode(createReservationDto.getLibraryCardBarcode())
+        Card card = cardRepository.getCardByBarcode(barcodeReaderDto.getLibraryCardBarcode())
                 .orElseThrow(() -> new NotFoundException("Library card not found"));
 
 
         //create reservation
-        ReservationDto reservationDto = new ReservationDto();
-        reservationDto.setBookItem(bookItemSummaryDto);
-        reservationDto.setLibraryCard(cardDto);
-        reservationDto.setCreationDate(LocalDate.now());
-        reservationDto.setActive(true);
-        reservationDto.getBookItem().setBookStatus(BookStatus.RESERVED);
+        Reservation reservation = new Reservation();
+        reservation.setBookItem(bookItem);
+        reservation.setCreationDate(LocalDate.now());
+        reservation.setCard(card);
+        reservation.setActive(true);
 
-        //save reservation
-        reservationRepository.save(reservationMapper.toReservationEntity(reservationDto));
+        bookItem.setStatus(BookStatus.RESERVED);
 
+        bookItemRepository.save(bookItem);
 
-        return reservationDto;
+        // Save reservation
+        reservationRepository.save(reservation);
+
+        return reservationMapper.toReservationDto(reservation);
+
 
     }
 }

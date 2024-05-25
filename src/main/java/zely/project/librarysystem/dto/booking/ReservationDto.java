@@ -17,15 +17,10 @@ import java.time.LocalDate;
 @Setter
 public class ReservationDto {
 
-
-    private Integer id;
-
     private LocalDate creationDate;
 
     private boolean active;
 
     private BookItemSummaryDto bookItem;
-
-    private CardDto libraryCard;
 
 }

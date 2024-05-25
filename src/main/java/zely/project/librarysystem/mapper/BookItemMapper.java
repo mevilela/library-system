@@ -6,6 +6,7 @@ import zely.project.librarysystem.domain.book.BookItem;
 import zely.project.librarysystem.dto.book.BookItemDto;
 import zely.project.librarysystem.dto.book.BookItemSummaryDto;
 import zely.project.librarysystem.dto.book.BookSummaryDto;
+import zely.project.librarysystem.dto.booking.BookItemForBookingInfoDto;
 
 @Mapper(componentModel = "spring", uses = {LibraryMapper.class, RackMapper.class, AuthorMapper.class, BookMapper.class})
 public interface BookItemMapper {
@@ -21,6 +22,18 @@ public interface BookItemMapper {
     @Mapping(target = "rack.library.name", source = "rack")
     @Mapping(target = "status", source="bookStatus")
     BookItem toBookItemFromSummaryDto(BookItemSummaryDto bookItemSummaryDto);
+
+    @Mapping(target = "status", source="bookStatus")
+    @Mapping(target= "borrowDate", source = "borrowDate")
+    @Mapping(target= "dueDate", source = "dueDate")
+    BookItem toBookItemFromBookingInfo(BookItemForBookingInfoDto bookItemForBookingInfoDto);
+
+    @Mapping(target = "bookStatus", source="status")
+    @Mapping(target= "borrowDate", source = "borrowDate")
+    @Mapping(target= "dueDate", source = "dueDate")
+    BookItemForBookingInfoDto toBookItemForBooking(BookItem bookItem);
+
+
 
 
 }

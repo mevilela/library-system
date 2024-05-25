@@ -8,6 +8,7 @@ import zely.project.librarysystem.domain.book.Book;
 import zely.project.librarysystem.domain.book.Publisher;
 import zely.project.librarysystem.dto.book.BookCreateDto;
 import zely.project.librarysystem.dto.book.BookDto;
+import zely.project.librarysystem.dto.book.BookNameAndAuthorDto;
 import zely.project.librarysystem.dto.book.BookSummaryDto;
 
 import java.util.Collections;
@@ -30,6 +31,10 @@ public interface BookMapper {
     @Mapping(target = "publisherName", source = "publisher.publisherName")
     @Mapping(target = "authorNames", expression = "java(mapAuthorNames(book))")
     BookSummaryDto toBookSummaryDto(Book book);
+
+
+    @Mapping(target = "authorNames", expression = "java(mapAuthorNames(book))")
+    BookNameAndAuthorDto toBookNameAndAuthorDto(Book book);
 
 
     @Mapping(target = "publisher", source = "publisherId", qualifiedByName = "mapIdToPublisher")

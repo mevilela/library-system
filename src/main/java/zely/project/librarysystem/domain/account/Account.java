@@ -31,6 +31,8 @@ public abstract class Account {
     @Embedded
     private Person person;
 
+    private Integer totalBooksCheckedOut;
+
     @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private Set<Card> cards = new HashSet<>();;
 

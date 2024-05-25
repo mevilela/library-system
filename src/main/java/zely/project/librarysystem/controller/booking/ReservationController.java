@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import zely.project.librarysystem.dto.booking.CreateReservationDto;
+import zely.project.librarysystem.dto.booking.BarcodeReaderDto;
 import zely.project.librarysystem.dto.booking.ReservationDto;
 import zely.project.librarysystem.service.booking.ReservationService;
 
@@ -22,9 +22,9 @@ public class ReservationController {
 
 
     @PostMapping("/")
-    public ResponseEntity createReservation(@RequestBody CreateReservationDto createReservationDto){
+    public ResponseEntity createReservation(@RequestBody BarcodeReaderDto barcodeReaderDto){
 
-        ReservationDto reservationSaved = reservationService.createReservation(createReservationDto);
+        ReservationDto reservationSaved = reservationService.createReservation(barcodeReaderDto);
 
         return new ResponseEntity<>(reservationSaved, HttpStatus.CREATED);
 
