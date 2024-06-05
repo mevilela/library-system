@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.domain.account.Account;
 import zely.project.librarysystem.domain.account.AccountStatus;
 import zely.project.librarysystem.domain.account.AccountType;
@@ -61,7 +62,7 @@ class CardControllerIT {
     }
     @Test
     void getCardByIdIsNotFound() {
-        assertThrows(NotFoundException.class, () -> {
+        assertThrows(NotFoundExceptionHandler.class, () -> {
             cardController.getCardById(55555);
         });
     }
@@ -119,7 +120,7 @@ class CardControllerIT {
     @Rollback
     @Test
     void testUpdateNotFound(){
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(NotFoundExceptionHandler.class, () ->
                 cardController.updateCardById(2222, null));
     }
 
@@ -144,7 +145,7 @@ class CardControllerIT {
 
     @Test
     void testDeleteNotFound(){
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(NotFoundExceptionHandler.class, () ->
                 cardController.deleteCardById(333));
     }
 }

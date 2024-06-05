@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.domain.library.Library;
 import zely.project.librarysystem.dto.library.LibraryDto;
 import zely.project.librarysystem.mapper.LibraryMapper;
@@ -136,7 +137,7 @@ class LibraryControllerIT {
 
     @Test
     void testUpdateNotFound(){
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(NotFoundExceptionHandler.class, () ->
                 libraryController.updateLibraryById(2222, null));
     }
 
@@ -156,7 +157,7 @@ class LibraryControllerIT {
 
     @Test
     void testDeleteNotFound(){
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(NotFoundExceptionHandler.class, () ->
                 libraryController.deleteLibraryById(333));
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.dto.book.BookItemDto;
 import zely.project.librarysystem.dto.book.BookItemSummaryDto;
 import zely.project.librarysystem.service.book.BookItemService;
@@ -29,12 +30,12 @@ public class BookItemController {
 
     @GetMapping("/id/{id}")
     public BookItemSummaryDto getBookItemById(@PathVariable Integer id){
-        return bookItemService.getBookItemById(id).orElseThrow(() -> new NotFoundException("id not found"));
+        return bookItemService.getBookItemById(id).orElseThrow(NotFoundExceptionHandler::new);
     }
 
     @GetMapping("/barcode/{bookBarcode}")
     public BookItemSummaryDto getBookItemByBookBarcode(@PathVariable String bookBarcode){
-        return bookItemService.getBookItemByBookItemByBarCode(bookBarcode).orElseThrow(() -> new NotFoundException("id not found"));
+        return bookItemService.getBookItemByBookItemByBarCode(bookBarcode).orElseThrow(NotFoundExceptionHandler::new);
     }
 
     @PostMapping
@@ -47,14 +48,14 @@ public class BookItemController {
 
     @PutMapping
     public ResponseEntity updateBookItemById(@PathVariable Integer id, @RequestBody BookItemDto bookItemDto){
-        bookItemService.updateBookItemById(id, bookItemDto).orElseThrow(() -> new NotFoundException("bookItem not found"));
+        bookItemService.updateBookItemById(id, bookItemDto).orElseThrow(NotFoundExceptionHandler::new);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteBookItemById(@PathVariable Integer id){
         if(!bookItemService.deleteBookItemById(id)){
-            throw new NotFoundException("bookItem not found");
+            throw new NotFoundExceptionHandler();
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

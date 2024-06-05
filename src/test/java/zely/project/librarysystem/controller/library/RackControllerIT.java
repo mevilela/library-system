@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.Rollback;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.domain.library.Rack;
 import zely.project.librarysystem.dto.library.LibraryDto;
 import zely.project.librarysystem.dto.library.RackDto;
@@ -50,7 +51,7 @@ class RackControllerIT {
     @Test
     void testRackIdIsNotFound() {
 
-        assertThrows(NotFoundException.class, () -> {
+        assertThrows(NotFoundExceptionHandler.class, () -> {
             rackController.getRackById(55555);
         });
 
@@ -112,7 +113,7 @@ class RackControllerIT {
 
     @Test
     void testUpdateNotFound(){
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(NotFoundExceptionHandler.class, () ->
                 rackController.updateRackById(2222, null));
     }
 
@@ -133,7 +134,7 @@ class RackControllerIT {
 
     @Test
     void testDeleteNotFound(){
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(NotFoundExceptionHandler.class, () ->
                 rackController.deleteRackById(333));
     }
 }

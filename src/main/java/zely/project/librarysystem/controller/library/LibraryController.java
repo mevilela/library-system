@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.dto.library.LibraryDto;
 import zely.project.librarysystem.service.library.LibraryService;
 
@@ -31,7 +32,7 @@ public class LibraryController {
     @GetMapping("/{id}")
     public LibraryDto getLibraryById(@PathVariable Integer id) {
         return libraryService.getLibraryById(id)
-                .orElseThrow(() -> new NotFoundException("id not found"));
+                .orElseThrow(NotFoundExceptionHandler::new);
     }
 
     @PostMapping
@@ -46,7 +47,7 @@ public class LibraryController {
     @PutMapping("/{id}")
     public ResponseEntity updateLibraryById(@PathVariable Integer id, @RequestBody LibraryDto libraryDto){
 
-        libraryService.updateLibrary(id, libraryDto).orElseThrow(() -> new NotFoundException("Library not found"));
+        libraryService.updateLibrary(id, libraryDto).orElseThrow(NotFoundExceptionHandler::new);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -55,7 +56,7 @@ public class LibraryController {
     public ResponseEntity deleteLibraryById(@PathVariable Integer id){
 
         if (!libraryService.deleteLibraryById(id)){
-            throw new NotFoundException("id not found");
+            throw new NotFoundExceptionHandler();
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

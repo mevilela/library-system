@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.dto.book.BookCreateDto;
 import zely.project.librarysystem.dto.book.BookDto;
 import zely.project.librarysystem.service.book.BookService;
@@ -28,12 +29,12 @@ public class BookController {
 
     @GetMapping("/id/{id}")
     public BookDto getBookById(@PathVariable Integer id){
-        return bookService.getBookById(id).orElseThrow(() -> new NotFoundException("id not found"));
+        return bookService.getBookById(id).orElseThrow(NotFoundExceptionHandler::new);
     }
 
     @GetMapping("/isbn/{isbn}")
     public BookDto getBookByIsbn(@PathVariable String isbn){
-        return bookService.getBookByIsbn(isbn).orElseThrow(() -> new NotFoundException("id not found"));
+        return bookService.getBookByIsbn(isbn).orElseThrow(NotFoundExceptionHandler::new);
     }
 
     @PostMapping
@@ -46,14 +47,14 @@ public class BookController {
 
     @PutMapping("/{id}")
     public ResponseEntity updateBookById(@PathVariable Integer id, @RequestBody BookDto bookDto){
-        bookService.updateBookById(id, bookDto).orElseThrow(() -> new NotFoundException("book not found"));
+        bookService.updateBookById(id, bookDto).orElseThrow(NotFoundExceptionHandler::new);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteBookById(@PathVariable Integer id){
         if(!bookService.deleteBookById(id)){
-            throw new NotFoundException("book not found");
+            throw new NotFoundExceptionHandler();
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

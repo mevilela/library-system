@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.dto.book.AuthorDto;
 import zely.project.librarysystem.dto.book.AuthorResponseDto;
 import zely.project.librarysystem.dto.book.AuthorUpdateDto;
@@ -29,7 +30,7 @@ public class AuthorController {
 
     @GetMapping("/{id}")
     public AuthorDto getAuthorById(@PathVariable Integer id){
-        return authorService.getAuthorById(id).orElseThrow(() -> new NotFoundException("id not found"));
+        return authorService.getAuthorById(id).orElseThrow(NotFoundExceptionHandler::new);
     }
 
     @PostMapping
@@ -42,14 +43,14 @@ public class AuthorController {
 
     @PutMapping("/{id}")
     public ResponseEntity updateAuthorById(@PathVariable Integer id, @RequestBody AuthorUpdateDto authorUpdateDto){
-        authorService.updateAuthorById(id, authorUpdateDto).orElseThrow(() -> new NotFoundException("author not found"));
+        authorService.updateAuthorById(id, authorUpdateDto).orElseThrow(NotFoundExceptionHandler::new);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteAuthorById(@PathVariable Integer id){
         if(!authorService.deleteAuthorById(id)){
-            throw new NotFoundException("author not found");
+            throw new NotFoundExceptionHandler();
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

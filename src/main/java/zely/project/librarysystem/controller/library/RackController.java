@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.dto.library.RackDto;
 import zely.project.librarysystem.service.library.RackService;
 
@@ -28,9 +29,7 @@ public class RackController {
     @GetMapping("/{id}")
     public RackDto getRackById(@PathVariable Integer id){
 
-        return rackService.getRackById(id).orElseThrow(
-                () -> new NotFoundException("Rack ID not found")
-        );
+        return rackService.getRackById(id).orElseThrow(NotFoundExceptionHandler::new);
     }
 
 //    @GetMapping("/{libraryCode}")
@@ -39,7 +38,7 @@ public class RackController {
 //        List<RackDto> racks = rackService.getRackByLibraryCode(libraryCode);
 //
 //        if (racks.isEmpty()) {
-//            throw new NotFoundException("Racks not found for the provided library code");
+//            throw new NotFoundExceptionHandler("Racks not found for the provided library code");
 //        }
 //
 //        return racks;
@@ -59,7 +58,7 @@ public class RackController {
     public ResponseEntity updateRackById(@PathVariable Integer id, @RequestBody RackDto rackDto){
 
         rackService.updateRackbyId(id, rackDto).orElseThrow(
-                () -> new NotFoundException("id not found")
+                NotFoundExceptionHandler::new
         );
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -69,7 +68,7 @@ public class RackController {
     public ResponseEntity deleteRackById(@PathVariable Integer id){
 
         if (!rackService.deleteRackById(id)){
-            throw new NotFoundException("ID not found");
+            throw new NotFoundExceptionHandler();
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

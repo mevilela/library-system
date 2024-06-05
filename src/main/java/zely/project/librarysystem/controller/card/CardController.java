@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.dto.card.CardDto;
 import zely.project.librarysystem.service.card.CardService;
 
@@ -32,14 +33,12 @@ public class CardController {
     @GetMapping("/{id}")
     public CardDto getCardById(@PathVariable Integer id){
 
-        return cardService.getCardById(id).orElseThrow(
-                () -> new NotFoundException("Card ID not found")
-        );
+        return cardService.getCardById(id).orElseThrow(NotFoundExceptionHandler::new);
     }
 
     @GetMapping("/barcode/{cardBarcode}")
     public CardDto getCardByBarcode(@PathVariable String cardBarcode){
-        return cardService.getCardByBarcode(cardBarcode).orElseThrow(() -> new NotFoundException("id not found"));
+        return cardService.getCardByBarcode(cardBarcode).orElseThrow(NotFoundExceptionHandler::new);
     }
 
 
@@ -57,9 +56,7 @@ public class CardController {
     @PutMapping("/{id}")
     public ResponseEntity updateCardById(@PathVariable Integer id, @RequestBody CardDto cardDto){
 
-        cardService.updateCardById(id, cardDto).orElseThrow(
-                () -> new NotFoundException("id not found")
-        );
+        cardService.updateCardById(id, cardDto).orElseThrow(NotFoundExceptionHandler::new);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -68,7 +65,7 @@ public class CardController {
     public ResponseEntity deleteCardById(@PathVariable Integer id){
 
         if (!cardService.deleteCardById(id)){
-            throw new NotFoundException("ID not found");
+            throw new NotFoundExceptionHandler();
         }
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

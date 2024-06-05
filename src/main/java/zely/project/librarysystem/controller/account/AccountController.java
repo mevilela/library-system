@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.domain.account.AccountType;
 import zely.project.librarysystem.dto.account.AccountCreateRequestDto;
 import zely.project.librarysystem.dto.account.AccountDto;
@@ -30,7 +31,7 @@ public class AccountController {
 
     @GetMapping("/{id}")
     public AccountDto getAccountById(@PathVariable Integer id){
-        return accountService.getAccountById(id).orElseThrow(() -> new NotFoundException("id not found"));
+        return accountService.getAccountById(id).orElseThrow(NotFoundExceptionHandler::new);
     }
 
     @PostMapping
@@ -42,7 +43,7 @@ public class AccountController {
 
     @PutMapping
     public ResponseEntity updateByAccountId(@PathVariable Integer id, @RequestBody AccountDto accountDto){
-        accountService.updateAccountById(id, accountDto).orElseThrow(() -> new NotFoundException("account not found"));
+        accountService.updateAccountById(id, accountDto).orElseThrow(NotFoundExceptionHandler::new);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -50,7 +51,7 @@ public class AccountController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteAccountById(@PathVariable Integer id){
         if(!accountService.deleteAccountById(id)){
-            throw new NotFoundException("account not found");
+            throw new NotFoundExceptionHandler();
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.domain.account.Account;
 import zely.project.librarysystem.domain.account.AccountStatus;
 import zely.project.librarysystem.domain.account.AccountType;
@@ -164,7 +165,7 @@ class AccountControllerIT {
 
     @Test
     void testUpdateNotFound(){
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(NotFoundExceptionHandler.class, () ->
                 accountController.updateByAccountId(2222, null));
     }
 
@@ -184,7 +185,7 @@ class AccountControllerIT {
 
     @Test
     void testDeleteNotFound(){
-        assertThrows(NotFoundException.class, () ->
+        assertThrows(NotFoundExceptionHandler.class, () ->
                 accountController.deleteAccountById(22));
     }
 
