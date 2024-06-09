@@ -126,7 +126,6 @@ class AccountControllerIT {
         joao.setPhone("222111333");
 
         AccountCreateRequestDto accountDto = new AccountCreateRequestDto();
-        accountDto.setAccountStatus(AccountStatus.ACTIVE);
         accountDto.setAccountType(AccountType.LIBRARIAN);
         accountDto.setPerson(joao);
 

@@ -1,9 +1,6 @@
 package zely.project.librarysystem.domain.account;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -15,4 +12,7 @@ public class Person {
     private java.lang.String email;
     private java.lang.String phone;
 
+    public Person(String email) {
+        this.email = email;
+    }
 }

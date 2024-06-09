@@ -1,5 +1,6 @@
 package zely.project.librarysystem.service.account;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import zely.project.librarysystem.domain.account.Account;
@@ -83,13 +84,11 @@ public class AccountServiceImpl implements AccountService {
 
         Account account = accountMapper.accountFromCreateDto(accountCreateRequestDto);
 
-        String accountStatus = accountCreateRequestDto.getAccountStatus().toString();
+        String encryptedPassword = new BCryptPasswordEncoder().encode(accountCreateRequestDto.getPassword());
 
-
-        account.setPassword(accountCreateRequestDto.getPassword());
+        account.setPassword(encryptedPassword);
         account.setPerson(personMapper.toPersonEntity(accountCreateRequestDto.getPerson()));
-        account.setAccountStatus(AccountStatus.valueOf(accountStatus));
-
+        account.setAccountStatus(AccountStatus.ACTIVE);
 
         return accountMapper.toAccountCreateDto(accountRepository.save(account));
 

@@ -1,14 +1,16 @@
 package zely.project.librarysystem.controller.account;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.webjars.NotFoundException;
 import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.domain.account.AccountType;
 import zely.project.librarysystem.dto.account.AccountCreateRequestDto;
 import zely.project.librarysystem.dto.account.AccountDto;
 import zely.project.librarysystem.service.account.AccountService;
+import zely.project.librarysystem.service.account.AuthorizationService;
 
 import java.util.List;
 
@@ -17,9 +19,11 @@ import java.util.List;
 public class AccountController {
 
     private final AccountService accountService;
+    private final AuthorizationService authorizationService;
 
-    public AccountController(AccountService accountService){
+    public AccountController(AccountService accountService, AuthorizationService authorizationService){
         this.accountService = accountService;
+        this.authorizationService = authorizationService;
     }
 
     @GetMapping
@@ -34,8 +38,12 @@ public class AccountController {
         return accountService.getAccountById(id).orElseThrow(NotFoundExceptionHandler::new);
     }
 
-    @PostMapping
-    public ResponseEntity<AccountCreateRequestDto> createNewAccount(@RequestBody AccountCreateRequestDto accountCreateRequestDto){
+    @PostMapping("/create")
+    public ResponseEntity<AccountCreateRequestDto> createNewAccount(@RequestBody @Valid AccountCreateRequestDto accountCreateRequestDto){
+        if(authorizationService.loadUserByUsername(accountCreateRequestDto.getPerson().getEmail()) != null){
+            return ResponseEntity.badRequest().build();
+        }
+
         AccountCreateRequestDto savedAccount = accountService.createNewAccount(accountCreateRequestDto);
 
         return new ResponseEntity<>(savedAccount, HttpStatus.CREATED);

@@ -2,6 +2,7 @@ package zely.project.librarysystem.domain.account;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.userdetails.UserDetails;
 import zely.project.librarysystem.domain.card.Card;
 
 import java.util.HashSet;
@@ -14,13 +15,13 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class Account {
+public abstract class Account implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private java.lang.String password;
+    private String password;
 
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
@@ -34,6 +35,7 @@ public abstract class Account {
     private Integer totalBooksCheckedOut;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private Set<Card> cards = new HashSet<>();;
+    private Set<Card> cards = new HashSet<>();
+
 
 }

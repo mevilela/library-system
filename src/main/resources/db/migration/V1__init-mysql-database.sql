@@ -11,7 +11,7 @@ CREATE TABLE library(
 CREATE TABLE account(
                         id INTEGER AUTO_INCREMENT NOT NULL,
                         dtype VARCHAR(31),
-                        password VARCHAR(36) NOT NULL,
+                        password VARCHAR(255) NOT NULL,
                         account_type ENUM('MEMBER', 'LIBRARIAN') NOT NULL,
                         account_status ENUM('ACTIVE', 'CLOSED', 'CANCELED', 'BLACKLISTED', 'NONE') NOT NULL,
                         name VARCHAR(100) NOT NULL,

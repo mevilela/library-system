@@ -17,8 +17,6 @@ import zely.project.librarysystem.domain.account.AccountType;
 
         private AccountType accountType;
 
-        private AccountStatus accountStatus;
-
         private String password;
 
         private PersonDto person;

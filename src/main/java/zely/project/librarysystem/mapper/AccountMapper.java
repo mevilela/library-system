@@ -14,11 +14,11 @@ public interface AccountMapper {
     AccountDto toAccountDto(Account account);
 
     @Mapping(target = "accountType", source = "accountType")
-    @Mapping(target = "accountStatus", source = "accountStatus")
+//    @Mapping(target = "accountStatus", source = "accountStatus")
     AccountCreateRequestDto toAccountCreateDto(Account account);
 
     @Mapping(target = "accountType", source = "accountType")
-    @Mapping(target = "accountStatus", source = "accountStatus")
+//    @Mapping(target = "accountStatus", source = "accountStatus")
     default Account accountFromCreateDto(AccountCreateRequestDto accountCreateRequestDto) {
 
         if (accountCreateRequestDto.getAccountType() == AccountType.MEMBER) {
