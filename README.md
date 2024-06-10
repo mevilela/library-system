@@ -83,6 +83,9 @@ The API returns appropriate HTTP status codes and error messages for invalid req
 ## Authorization
 Authorization is required for certain endpoints, such as creating, updating, or deleting resources. Only users with specific roles (e.g., LIBRARIAN) have access to these endpoints.
 
+## Swagger Documentation
+You can access the Swagger API documentation by visiting "/swagger-ui.html" in your browser after running the application.
+
 ## Usage
 Before using the API, make sure to set up the necessary configurations and dependencies.
 Refer to the provided endpoint documentation for details on each endpoint's functionality and required parameters.
