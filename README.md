@@ -2,6 +2,7 @@
 
 This is the RESTful API for a library management system. It provides endpoints to manage various entities such as accounts, books, authors, publishers, libraries, racks, book items, lending, and reservations.
 
+
 ## Technologies Used
 - Spring Boot
 - Spring Security
@@ -89,3 +90,12 @@ You can access the Swagger API documentation by visiting [`http://localhost:8080
 ## Usage
 Before using the API, make sure to set up the necessary configurations and dependencies.
 Refer to the provided endpoint documentation for details on each endpoint's functionality and required parameters.
+
+## How To Run
+### Running the application Locally
+`mvn clean install`
+`mvn spring-boot:run`
+
+### Prerequisites
+- JDK 8 or higher installed
+- Maven 3.x installed
