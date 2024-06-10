@@ -37,6 +37,11 @@ public class BookController {
         return bookService.getBookByIsbn(isbn).orElseThrow(NotFoundExceptionHandler::new);
     }
 
+    @GetMapping("/subject/{subject}")
+    public BookDto getBookBySubject(@PathVariable String subject){
+        return bookService.getBookBySubject(subject).orElseThrow(NotFoundExceptionHandler::new);
+    }
+
     @PostMapping
     public ResponseEntity<BookCreateDto> createNewBook(@RequestBody BookCreateDto bookCreateDto){
 

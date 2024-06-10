@@ -12,6 +12,7 @@ import zely.project.librarysystem.dto.library.RackDto;
 import zely.project.librarysystem.mapper.BookItemMapper;
 import zely.project.librarysystem.repository.book.BookItemRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +37,11 @@ public class BookItemServiceImpl implements BookItemService {
                bookItemMapper::toBookItemSummaryDto
        ).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public Optional<BookItemSummaryDto> getBookItemByPublicationDate(LocalDate date) {
+        return Optional.ofNullable(bookItemMapper.toBookItemSummaryDto((bookItemRepository.getBookItemByPublicationDate(date)).orElse(null)));
     }
 
     @Override

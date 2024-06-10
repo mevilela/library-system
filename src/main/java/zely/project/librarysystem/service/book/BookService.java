@@ -21,4 +21,6 @@ public interface BookService {
     Optional<BookDto> getBookByIsbn(String isbn);
 
     BookCreateDto createNewBook(BookCreateDto bookCreateDto);
+
+    Optional<BookDto> getBookBySubject(String subject);
 }

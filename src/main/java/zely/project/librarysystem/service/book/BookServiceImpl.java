@@ -43,6 +43,12 @@ public class BookServiceImpl implements BookService {
 
     }
 
+    @Override
+    public Optional<BookDto> getBookBySubject(String subject) {
+        return Optional.ofNullable(bookMapper.toBookDto((bookRepository.findBookBySubject(subject)).orElse(null)));
+
+    }
+
 
     @Override
     public Optional<BookDto> updateBookById(Integer id, BookDto bookDto) {

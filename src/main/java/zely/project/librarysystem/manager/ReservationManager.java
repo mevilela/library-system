@@ -2,7 +2,7 @@ package zely.project.librarysystem.manager;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.domain.book.BookItem;
 import zely.project.librarysystem.domain.book.BookStatus;
 import zely.project.librarysystem.domain.booking.Reservation;
@@ -15,6 +15,7 @@ import zely.project.librarysystem.repository.booking.ReservationRepository;
 import zely.project.librarysystem.repository.card.CardRepository;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class ReservationManager {
@@ -34,15 +35,15 @@ public class ReservationManager {
 
         //find bookItem
         BookItem bookItem = bookItemRepository.getBookItemByBookBarcode(barcodeReaderDto.getBookItemBarcode())
-                .orElseThrow(() -> new NotFoundException("BookItem not found"));
+                .orElseThrow(() -> new NotFoundExceptionHandler("BookItem not found"));
 
         if (bookItem.getStatus() == BookStatus.LOST) {
-            throw new IllegalStateException("This book is lost");
+            throw new RuntimeException("This book is not available");
         }
 
         //find card
         Card card = cardRepository.getCardByBarcode(barcodeReaderDto.getLibraryCardBarcode())
-                .orElseThrow(() -> new NotFoundException("Library card not found"));
+                .orElseThrow(() -> new NotFoundExceptionHandler("Library card not found"));
 
 
         //create reservation
@@ -59,8 +60,11 @@ public class ReservationManager {
         // Save reservation
         reservationRepository.save(reservation);
 
+
         return reservationMapper.toReservationDto(reservation);
 
 
     }
+
+
 }

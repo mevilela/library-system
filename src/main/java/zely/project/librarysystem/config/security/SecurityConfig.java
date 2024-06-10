@@ -40,11 +40,14 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/account/create").permitAll()
                         .requestMatchers(HttpMethod.POST,
                                 "/api/book", "/api/card", "/api/rack", "/api/library", "/api/book-item",
-                                "/api/author", "/api/publisher").hasRole("LIBRARIAN")
+                                "/api/author", "/api/publisher", "/api/lending/loan", "/api/lending/return").hasRole("LIBRARIAN")
+                        .requestMatchers(HttpMethod.DELETE).hasRole("LIBRARIAN")
+                        .requestMatchers(HttpMethod.PUT).hasRole("LIBRARIAN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+
     }
 
 

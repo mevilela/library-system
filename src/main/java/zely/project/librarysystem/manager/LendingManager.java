@@ -2,21 +2,26 @@ package zely.project.librarysystem.manager;
 
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
+import zely.project.librarysystem.controller.NotFoundExceptionHandler;
 import zely.project.librarysystem.domain.book.BookItem;
 import zely.project.librarysystem.domain.book.BookStatus;
 import zely.project.librarysystem.domain.booking.Lending;
+import zely.project.librarysystem.domain.booking.Reservation;
 import zely.project.librarysystem.domain.card.Card;
 import zely.project.librarysystem.dto.booking.BarcodeReaderDto;
 import zely.project.librarysystem.dto.booking.LendingDto;
 import zely.project.librarysystem.dto.booking.ReturningBookDto;
 import zely.project.librarysystem.mapper.BookItemMapper;
 import zely.project.librarysystem.mapper.LendingMapper;
+import zely.project.librarysystem.mapper.ReservationMapper;
 import zely.project.librarysystem.repository.book.BookItemRepository;
 import zely.project.librarysystem.repository.booking.LendingRepository;
+import zely.project.librarysystem.repository.booking.ReservationRepository;
 import zely.project.librarysystem.repository.card.CardRepository;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.Set;
 
 
 @Service
@@ -30,26 +35,51 @@ public class LendingManager {
     private final LendingMapper lendingMapper;
     private final BookItemMapper bookItemMapper;
 
-    public LendingManager(BookItemRepository bookItemRepository, LendingRepository lendingRepository, CardRepository cardRepository, LendingMapper lendingMapper, BookItemMapper bookItemMapper) {
+    private final ReservationMapper reservationMapper;
+    private final ReservationRepository reservationRepository;
+
+    public LendingManager(BookItemRepository bookItemRepository, LendingRepository lendingRepository, CardRepository cardRepository, LendingMapper lendingMapper, BookItemMapper bookItemMapper, ReservationMapper reservationMapper, ReservationRepository reservationRepository) {
         this.bookItemRepository = bookItemRepository;
         this.lendingRepository = lendingRepository;
         this.cardRepository = cardRepository;
         this.lendingMapper = lendingMapper;
         this.bookItemMapper = bookItemMapper;
+        this.reservationMapper = reservationMapper;
+        this.reservationRepository = reservationRepository;
     }
 
     public LendingDto createNewLoan(BarcodeReaderDto barcodeReaderDto) {
 
         BookItem bookItem = bookItemRepository.getBookItemByBookBarcode(barcodeReaderDto.getBookItemBarcode())
-                .orElseThrow(() -> new NotFoundException("BookItem not found"));
+                .orElseThrow(() -> new NotFoundExceptionHandler("BookItem not found"));
 
-        if (!bookItem.getStatus().equals(BookStatus.AVAILABLE)){
+        Card card = cardRepository.getCardByBarcode(barcodeReaderDto.getLibraryCardBarcode())
+                .orElseThrow(() -> new NotFoundExceptionHandler("LibraryCard not found"));
+
+        if (bookItem.getStatus().equals(BookStatus.LOANED)){
+            throw new RuntimeException("This book is Loaned");
+        }
+
+        if (bookItem.getStatus().equals(BookStatus.LOST)){
             throw new RuntimeException("This book is not available");
         }
 
-        Card card = cardRepository.getCardByBarcode(barcodeReaderDto.getLibraryCardBarcode())
-                .orElseThrow(() -> new RuntimeException("LibraryCard not found"));
+        if(bookItem.getStatus().equals(BookStatus.RESERVED)){
 
+            boolean validReservation = false;
+
+            for (Reservation reservation : bookItem.getReservations()){
+                if(reservation.getCard().equals(card)){
+                    validReservation = true;
+                }
+                break;
+            }
+
+            if (!validReservation) {
+                throw new RuntimeException("This book is reserved for another card");
+            }
+
+        }
 
         Lending lending = new Lending();
         lending.setCard(card);

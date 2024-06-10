@@ -10,6 +10,7 @@ import zely.project.librarysystem.dto.book.BookItemDto;
 import zely.project.librarysystem.dto.book.BookItemSummaryDto;
 import zely.project.librarysystem.service.book.BookItemService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -37,6 +38,11 @@ public class BookItemController {
     public BookItemSummaryDto getBookItemByBookBarcode(@PathVariable String bookBarcode){
         return bookItemService.getBookItemByBookItemByBarCode(bookBarcode).orElseThrow(NotFoundExceptionHandler::new);
     }
+    @GetMapping("/publication-date/{date}")
+    public BookItemSummaryDto getBookItemByPublicationDate(@PathVariable LocalDate date){
+        return bookItemService.getBookItemByPublicationDate(date).orElseThrow(NotFoundExceptionHandler::new);
+    }
+
 
     @PostMapping
     public ResponseEntity<BookItemDto> createNewBookItem(@RequestBody BookItemDto bookItemDto){
